@@ -6,18 +6,20 @@
     <description>Recent content on lov31ess.py</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
+    <copyright>© 2019 lov31ess. All Rights Reserved</copyright>
     <lastBuildDate>Sun, 21 Jul 2019 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="https://krisloveless.github.io/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
-      <title>Base R</title>
-      <link>https://krisloveless.github.io/posts/baser/</link>
+      <title>Cheatsheets</title>
+      <link>https://krisloveless.github.io/2019/07/cheatsheets/</link>
       <pubDate>Sun, 21 Jul 2019 00:00:00 +0000</pubDate>
       
-      <guid>https://krisloveless.github.io/posts/baser/</guid>
-      <description></description>
+      <guid>https://krisloveless.github.io/2019/07/cheatsheets/</guid>
+      <description> These are some useful R materials for beginners. Keep updating.
+Base R </description>
     </item>
     
   </channel>

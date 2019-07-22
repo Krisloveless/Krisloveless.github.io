@@ -1082,7 +1082,12 @@ footer small {
     text-decoration: none;
 }
 
-.posts li time {
+.time{
+   font-size: .8em;
+    margin: .5em 0 0;
+}
+
+.posts li time ,.time {
     font-family: 'Source Code Pro', monospace;
     padding-right: 0.7em;
     font-size: 0.8em;
@@ -1090,17 +1095,18 @@ footer small {
 
 .posts li a .p-wrap p .title-attr {    
     color: #F92672 !important;
+
 }
 
-.posts li a .p-attr {
+.posts li a .p-attr,.posts li .p-attr, .time .p-attr {
     color: #F92672 !important;
 }
 
-.posts li a .class-attr {
+.posts li a .class-attr, .time .p-attr .class-attr {
     color: #A6E22E !important;
 }
 
-.posts li a .date-attr {
+.posts li a .date-attr, .time .p-attr .date-attr {
     color: #E6DB74 !important;
 }
 
