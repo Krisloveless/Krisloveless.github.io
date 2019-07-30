@@ -834,7 +834,7 @@ header {
     right: -25em;
     width: 25em;
     height: 100%;
-    background: #ECECEC;
+    background: #B3AEAE;
     z-index: 1000;
     overflow: scroll;
 }
@@ -884,7 +884,7 @@ header {
     font-family: 'Source Code Pro', monospace;
     font-size: 90%;
     line-height: 1.5;
-    color: gray;
+    color: black;
     margin-bottom: 0;
 }
 
