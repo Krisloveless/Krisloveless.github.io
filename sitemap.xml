@@ -8,8 +8,19 @@
   </url>
   
   <url>
+    <loc>https://krisloveless.github.io/about/test/</loc>
+    <lastmod>2019-07-29T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
     <loc>https://krisloveless.github.io/2019/07/cheatsheets/</loc>
     <lastmod>2019-07-21T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://krisloveless.github.io/about/</loc>
+    <lastmod>2019-07-29T00:00:00+00:00</lastmod>
+    <priority>0</priority>
   </url>
   
   <url>

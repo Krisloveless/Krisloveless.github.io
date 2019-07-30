@@ -25,6 +25,15 @@ std:endl Using std::endl can be a bit inefficient, as it actually does two jobs:
     </item>
     
     <item>
+      <title>testing</title>
+      <link>https://krisloveless.github.io/about/test/</link>
+      <pubDate>Mon, 29 Jul 2019 00:00:00 +0000</pubDate>
+      
+      <guid>https://krisloveless.github.io/about/test/</guid>
+      <description></description>
+    </item>
+    
+    <item>
       <title>Cheatsheets</title>
       <link>https://krisloveless.github.io/2019/07/cheatsheets/</link>
       <pubDate>Sun, 21 Jul 2019 00:00:00 +0000</pubDate>
