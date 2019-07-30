@@ -18,7 +18,9 @@
       <pubDate>Mon, 29 Jul 2019 00:00:00 +0000</pubDate>
       
       <guid>https://krisloveless.github.io/2019/07/c---note1/</guid>
-      <description>The initalization int width = 5;: copy initialization int width(5); : direct initialization int width{}/*zero initialization*/;int width{5}/*explicit initialization*/;int width{4.5}; : uniform initialization,{} will get 0 init, 4.5 with issue an error.
+      <description>The initalization int width = 5;: copy initialization
+int width(5); : direct initialization
+int width{}/*zero initialization*/;int width{5}/*explicit initialization*/;int width{4.5}; : uniform initialization,{} will get 0 init, 4.5 with issue an error.
 std:endl Using std::endl can be a bit inefficient, as it actually does two jobs: it moves the cursor to the next line, and it “flushes” the output which &amp;lsquo;\n&amp;rsquo; won&amp;rsquo;t Prefer ‘\n’ over std::endl when outputting text to the console.</description>
     </item>
     
