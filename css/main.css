@@ -834,7 +834,7 @@ header {
     right: -25em;
     width: 25em;
     height: 100%;
-    background: #B3AEAE;
+    background: #000;
     z-index: 1000;
     overflow: scroll;
 }
@@ -877,14 +877,14 @@ header {
 .off-canvas .bio h1 {
     margin: 0;
     font-family: 'Source Code Pro', monospace;
-    color: #000;
+    color: #fff;
 }
 
 .off-canvas .bio p {
     font-family: 'Source Code Pro', monospace;
     font-size: 90%;
     line-height: 1.5;
-    color: black;
+    color: #fff;
     margin-bottom: 0;
 }
 
