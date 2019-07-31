@@ -7,10 +7,22 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>© 2019 lov31ess. All Rights Reserved</copyright>
-    <lastBuildDate>Mon, 29 Jul 2019 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Tue, 30 Jul 2019 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="https://krisloveless.github.io/posts/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>C&#43;&#43; note(2)</title>
+      <link>https://krisloveless.github.io/2019/07/c---note2/</link>
+      <pubDate>Tue, 30 Jul 2019 00:00:00 +0000</pubDate>
+      
+      <guid>https://krisloveless.github.io/2019/07/c---note2/</guid>
+      <description>User-defined function Functions that you write yourself are called user-defined functions.
+Local variables &amp;amp; lifetime Function parameters, as well as variables defined inside the function body, are called local variables.
+an object’s lifetime is defined to be the time between its creation and destruction.
+Forward declaration int add(int, int); A forward declaration allows us to tell the compiler about the existence of an identifier before actually defining the identifier.</description>
+    </item>
     
     <item>
       <title>C&#43;&#43; note(1)</title>
