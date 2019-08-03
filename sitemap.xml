@@ -3,6 +3,16 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
+    <loc>https://krisloveless.github.io/2019/08/c---note4/</loc>
+    <lastmod>2019-08-01T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://krisloveless.github.io/2019/07/c---note3/</loc>
+    <lastmod>2019-07-31T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
     <loc>https://krisloveless.github.io/2019/07/c---note2/</loc>
     <lastmod>2019-07-30T00:00:00+00:00</lastmod>
   </url>
@@ -30,7 +40,7 @@
   
   <url>
     <loc>https://krisloveless.github.io/tags/c&#43;&#43;/</loc>
-    <lastmod>2019-07-30T00:00:00+00:00</lastmod>
+    <lastmod>2019-08-01T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -47,7 +57,7 @@
   
   <url>
     <loc>https://krisloveless.github.io/posts/</loc>
-    <lastmod>2019-07-30T00:00:00+00:00</lastmod>
+    <lastmod>2019-08-01T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -59,13 +69,13 @@
   
   <url>
     <loc>https://krisloveless.github.io/tags/</loc>
-    <lastmod>2019-07-30T00:00:00+00:00</lastmod>
+    <lastmod>2019-08-01T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
     <loc>https://krisloveless.github.io/</loc>
-    <lastmod>2019-07-30T00:00:00+00:00</lastmod>
+    <lastmod>2019-08-01T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
