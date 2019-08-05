@@ -7,17 +7,17 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>© 2019 lov31ess. All Rights Reserved</copyright>
-    <lastBuildDate>Wed, 04 Sep 2019 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Sun, 04 Aug 2019 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="https://krisloveless.github.io/tags/c++/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
       <title>C&#43;&#43; note(5)</title>
-      <link>https://krisloveless.github.io/2019/09/c---note5/</link>
-      <pubDate>Wed, 04 Sep 2019 00:00:00 +0000</pubDate>
+      <link>https://krisloveless.github.io/2019/08/c---note5/</link>
+      <pubDate>Sun, 04 Aug 2019 00:00:00 +0000</pubDate>
       
-      <guid>https://krisloveless.github.io/2019/09/c---note5/</guid>
+      <guid>https://krisloveless.github.io/2019/08/c---note5/</guid>
       <description>A very good function for pow int pow(int base, int exp) { int result = 1; while (exp) { if (exp &amp;amp; 1) result *= base; exp &amp;gt;&amp;gt;= 1; base *= base; } return result; }  Comma operator Comma , x, y Evaluate x then y, returns value of y
 int x = 0; int y = 2; int z = (++x, ++y); // increment x and y, z is 3  Converting decimal to binary Converting -76 to binary:</description>
     </item>
