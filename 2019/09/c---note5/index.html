@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+
+
+
+ <html class="no-js"> 
+<head>
+    <title>C&#43;&#43; note(5)  &middot; lov31ess.py </title>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta http-equiv="content-language" content="en-us" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="author" content="Shuo &#34;Krisloveless&#34; Jia">
+    <meta name="description" content="">
+    <meta name="generator" content="Hugo 0.26" />
+
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="https://krisloveless.github.io/css/smooth-scrollbar.css" />
+    <link rel="stylesheet" type="text/css" href="https://krisloveless.github.io/css/main.css" />
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.6/styles/tomorrow.min.css" />
+    
+
+    <style>
+        .posts li {
+            visibility: hidden;
+        }
+    </style> 
+</head>
+<body>
+    
+    
+
+    <header>	
+	<div class="h-wrap">
+		
+		<h1 class="title"><a href="https://krisloveless.github.io/">lov31ess.py</a></h1>
+		
+	</div>
+</header>
+    
+    <div class="site-wrapper" id="full-wrapper">
+        
+        <section class="single-wrap">
+            <article class="single-content" itemscope itemtype="//schema.org/BlogPosting">
+                <div class="feat">
+                    <h5 class="page-date">
+                    <time datetime="" itemprop="datePublished">
+                    04 September 2019
+                   
+                    </time>
+                    </h5>
+                </div>
+                <h1 class="page-title" itemprop="name headline">C&#43;&#43; note(5)</h1>
+                <div itemprop="articleBody">
+                   <div style="text-align: center;font-style: italic;font-weight: bold;">C&#43;&#43; note originated from learncpp.com</div> 
+                    
+
+<h2 id="a-very-good-function-for-pow">A very good function for pow</h2>
+
+<pre><code>int pow(int base, int exp)
+{
+    int result = 1;
+    while (exp)
+    {
+        if (exp &amp; 1)
+            result *= base;
+        exp &gt;&gt;= 1;
+        base *= base;
+    }
+ 
+    return result;
+}
+</code></pre>
+
+<h2 id="comma-operator">Comma operator</h2>
+
+<p>Comma   ,   x, y    Evaluate x then y, returns value of y</p>
+
+<pre><code>int x = 0;
+int y = 2;
+int z = (++x, ++y); // increment x and y, z is 3
+</code></pre>
+
+<h2 id="converting-decimal-to-binary">Converting decimal to binary</h2>
+
+<p>Converting -76 to binary:</p>
+
+<p>Positive 76 in binary: 0100 1100
+Invert all the bits: 1011 0011
+Add 1: 1011 0100</p>
+
+<h2 id="conversion">conversion</h2>
+
+<table>
+<thead>
+<tr>
+<th>name</th>
+<th>symbol</th>
+<th>form</th>
+<th>operation</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>left shift</td>
+<td>&lt;&lt;</td>
+<td>x &lt;&lt; y</td>
+<td>all bits in x shifted left y bits</td>
+</tr>
+
+<tr>
+<td>right shift</td>
+<td>&gt;&gt;</td>
+<td>x &gt;&gt; y</td>
+<td>all bits in x shifted right y bits</td>
+</tr>
+
+<tr>
+<td>bitwise NOT</td>
+<td>~</td>
+<td>~x</td>
+<td>all bits in x flipped</td>
+</tr>
+
+<tr>
+<td>bitwise AND</td>
+<td>&amp;</td>
+<td>x &amp; y</td>
+<td>each bit in x AND each bit in y</td>
+</tr>
+
+<tr>
+<td>bitwise OR</td>
+<td>|</td>
+<td>x | y</td>
+<td>each bit in x OR each bit in y</td>
+</tr>
+
+<tr>
+<td>bitwise XOR</td>
+<td>^</td>
+<td>x ^ y</td>
+<td>each bit in x XOR each bit in y</td>
+</tr>
+</tbody>
+</table>
+
+<h2 id="using-bitflag">using bitflag</h2>
+
+<p>Bit flags</p>
+
+<p>The smallest addressable unit of memory is a byte. Since all variables need to have unique addresses, this means variables must be at least one byte in size.</p>
+
+<p>For most variable types, this is fine. However, for boolean values, this is a bit wasteful. Boolean types only have two states: true (1), or false (0). This only requires one bit to store. However, if a variable must be at least a byte, and a byte is typically 8 bits, that means a boolean is using 1 bit and leaving the other 7 unused.</p>
+
+<p>In the majority of cases, this is fine &ndash; we’re usually not so hard-up for memory that we need to care about 7 wasted bits. However, in some storage-intensive cases, it can be useful to “pack” 8 individual boolean values into a single byte for storage efficiency purposes. This is done by using the bitwise operators to set, clear, and query individual bits in a byte, treating each as a separate boolean value. These individual bits are called bit flags.</p>
+
+<p>Bit counting</p>
+
+<p>When talking about individual bits, we typically count from right to left, starting with 0 (not 1). So given the bit pattern 0000 0111, bits 0 through 2 are 1, and bits 3 through 7 are 0.</p>
+
+<p>So although we are typically used to counting starting with 1, in this lesson we’ll generally count starting from 0.</p>
+
+<p>Defining bit flags in C++14</p>
+
+<p>In order to work with individual bits, we need to have a way to identify the individual bits within a byte, so we can manipulate those bits (turn them on and off). This is typically done by defining a symbolic constant to give a meaningful name to each bit used. The symbolic constant is given a value that represents that bit.</p>
+
+<p>Because C++14 supports binary literals, this is easiest in C++14:</p>
+
+<pre><code>// Define 8 separate bit flags (these can represent whatever you want)
+const unsigned char option0 = 0b0000'0001; // represents bit 0
+const unsigned char option1 = 0b0000'0010; // represents bit 1
+const unsigned char option2 = 0b0000'0100; // represents bit 2 
+const unsigned char option3 = 0b0000'1000; // represents bit 3
+const unsigned char option4 = 0b0001'0000; // represents bit 4
+const unsigned char option5 = 0b0010'0000; // represents bit 5
+const unsigned char option6 = 0b0100'0000; // represents bit 6
+const unsigned char option7 = 0b1000'0000; // represents bit 7
+</code></pre>
+
+<p>Now we have a set of symbolic constants that represents each bit position. We can use these to manipulate the bits (which we’ll show how to do in just a moment).</p>
+
+<p>Defining bit flags in C++11 or earlier</p>
+
+<p>Because C++11 doesn’t support binary literals, we have to use other methods to set the symbolic constants. There are two good methods for doing this. Less comprehensible, but more common, is to use hexadecimal. If you need a refresher on hexadecimal, please revisit lesson 4.12 &ndash; Literals.</p>
+
+<pre><code>// Define 8 separate bit flags (these can represent whatever you want)
+const unsigned char option0 = 0x1; // hex for 0000 0001 
+const unsigned char option1 = 0x2; // hex for 0000 0010
+const unsigned char option2 = 0x4; // hex for 0000 0100
+const unsigned char option3 = 0x8; // hex for 0000 1000
+const unsigned char option4 = 0x10; // hex for 0001 0000
+const unsigned char option5 = 0x20; // hex for 0010 0000
+const unsigned char option6 = 0x40; // hex for 0100 0000
+const unsigned char option7 = 0x80; // hex for 1000 0000
+</code></pre>
+
+<p>This can be a little hard to read. One way to make it easier is to use the left-shift operator to shift a bit into the proper location:</p>
+
+<pre><code>// Define 8 separate bit flags (these can represent whatever you want)
+const unsigned char option0 = 1 &lt;&lt; 0; // 0000 0001 
+const unsigned char option1 = 1 &lt;&lt; 1; // 0000 0010
+const unsigned char option2 = 1 &lt;&lt; 2; // 0000 0100
+const unsigned char option3 = 1 &lt;&lt; 3; // 0000 1000
+const unsigned char option4 = 1 &lt;&lt; 4; // 0001 0000
+const unsigned char option5 = 1 &lt;&lt; 5; // 0010 0000
+const unsigned char option6 = 1 &lt;&lt; 6; // 0100 0000
+const unsigned char option7 = 1 &lt;&lt; 7; // 1000 0000
+</code></pre>
+
+<p>Using bit flags to manipulate bits</p>
+
+<p>The next thing we need is a variable that we want to manipulate. Typically, we use an unsigned integer of the appropriate size (8 bits, 16 bits, 32 bits, etc… depending on how many options we have).</p>
+
+<p>// Since we have 8 options above, we&rsquo;ll use an 8-bit value to hold our options
+// Each bit in myflags corresponds to one of the options defined above
+unsigned char myflags = 0; // all bits turned off to start</p>
+
+<p>Variable myflags, defined above, will hold the actual bits that we’ll turn on and off. How do we turns those bits on and off? We use our bit flags (options).</p>
+
+<p>Turning individual bits on</p>
+
+<p>To set a bit (turn on), we use bitwise OR equals (operator |=):</p>
+
+<p><code>myflags |= option4; // turn option 4 on</code></p>
+
+<p>Let’s unpack this one to show how it works in more detail.</p>
+
+<p>myflags |= option4 is the equivalent of myflags = (myflags | option4).</p>
+
+<p>Evaluating the portion between the parenthesis:</p>
+
+<p>myflags = 0000 0000 (we initialized this to 0)</p>
+
+<h2 id="option4-0001-0000">option4 = 0001 0000</h2>
+
+<p>result  = 0001 0000</p>
+
+<p>So we get myflags = 0001 0000. In other words, we just turned the 4th bit on.</p>
+
+<p>We can also turn on multiple bits at the same time using bitwise OR:</p>
+
+<p><code>myflags |= (option4 | option5); // turn options 4 and 5 on at the same time</code></p>
+
+<p>Turning individual bits off</p>
+
+<p>To clear a bit (turn off), we use bitwise AND with an inverse bit pattern:</p>
+
+<p><code>myflags &amp;= ~option4; // turn option 4 off</code></p>
+
+<p>This works similarly to the above. Let’s say myflags was initially set to 0001 1100 (options 2, 3, and 4 turned on).</p>
+
+<p>myflags &amp;= ~option4; is the equivalent of myflags = (myflags &amp; ~option4).</p>
+
+<p>myflags  = 0001 1100</p>
+
+<h2 id="option4-1110-1111">~option4 = 1110 1111</h2>
+
+<p>result   = 0000 1100</p>
+
+<p>So 0000 1100 gets assigned back to myflags. In other words, we just turned off bit 4 (and left the other bits alone).</p>
+
+<p>We can turn off multiple bits at the same time:</p>
+
+<p><code>myflags &amp;= ~(option4 | option5); // turn options 4 and 5 off at the same time</code></p>
+
+<p>Flipping individual bits</p>
+
+<p>To toggle a bit state, we use bitwise XOR:</p>
+
+<pre><code>myflags ^= option4; // flip option4 from on to off, or vice versa
+myflags ^= (option4 | option5); // flip options 4 and 5 at the same time
+</code></pre>
+
+<p>Determining if a bit is on or off</p>
+
+<p>To query a bit state, we use bitwise AND:</p>
+
+<pre><code>if (myflags &amp; option4)
+    std::cout &lt;&lt; &quot;myflags has option 4 set&quot;;
+if (!(myflags &amp; option5))
+    std::cout &lt;&lt; &quot;myflags does not have option 5 set&quot;;
+</code></pre>
+
+<p>Bit flags in real life</p>
+
+<p>In OpenGL (a 3d graphics library), some functions take one or more bit flags as a parameter:</p>
+
+<p>glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // clear the color and the depth buffer</p>
+
+<p>GL_COLOR_BUFFER_BIT and GL_DEPTH_BUFFER_BIT are defined as follows (in gl2.h):</p>
+
+<pre><code>#define GL_DEPTH_BUFFER_BIT               0x00000100
+#define GL_STENCIL_BUFFER_BIT             0x00000400
+#define GL_COLOR_BUFFER_BIT               0x00004000
+
+Here’s a less abstract example for a game we might write:
+
+
+    
+#include &lt;iostream&gt;
+int main()
+{
+        // Define a bunch of physical/emotional states
+    const unsigned char isHungry = 1 &lt;&lt; 0; // 0000 0001
+    const unsigned char isSad = 1 &lt;&lt; 1; // 0000 0010
+    const unsigned char isMad = 1 &lt;&lt; 2; // 0000 0100
+    const unsigned char isHappy = 1 &lt;&lt; 3; // 0000 1000
+    const unsigned char isLaughing = 1 &lt;&lt; 4; // 0001 0000
+    const unsigned char isAsleep = 1 &lt;&lt; 5; // 0010 0000
+    const unsigned char isDead = 1 &lt;&lt; 6; // 0100 0000
+    const unsigned char isCrying = 1 &lt;&lt; 7; // 1000 0000
+ 
+    unsigned char me = 0; // all flags/options turned off to start
+    me |= isHappy | isLaughing; // I am happy and laughing
+    me &amp;= ~isLaughing; // I am no longer laughing
+ 
+    // Query a few states (we'll use static_cast&lt;bool&gt; to interpret the results as a boolean value rather than an integer)
+    std::cout &lt;&lt; &quot;I am happy? &quot; &lt;&lt; static_cast&lt;bool&gt;(me &amp; isHappy) &lt;&lt; '\n';
+    std::cout &lt;&lt; &quot;I am laughing? &quot; &lt;&lt; static_cast&lt;bool&gt;(me &amp; isLaughing) &lt;&lt; '\n';
+ 
+    return 0;
+}
+</code></pre>
+
+<p>Why are bit flags useful?</p>
+
+<p>Astute readers will note that the above myflags example actually doesn’t save any memory. 8 booleans would normally take 8 bytes. But the above example uses 9 bytes (8 bytes to define the bit flag options, and 1 bytes for the bit flag)! So why would you actually want to use bit flags?</p>
+
+<p>Bit flags are typically used in two cases:</p>
+
+<p>1) When you have many sets of identical bitflags.</p>
+
+<p>Instead of a single myflags variable, consider the case where you have two myflags variables: myflags1 and myflags2, each of which can store 8 options. If you defined these as two separate sets of booleans, you’d need 16 booleans, and thus 16 bytes. However, using bit flags, the memory cost is only 10 (8 bytes to define the options, and 1 byte for each myflags variable). With 100 myflag variables, your memory cost would be 108 bytes instead of 800. The more identical variables you need, the more substantial your memory savings.</p>
+
+<p>Let’s take a look at a more concrete example. Imagine you’re creating a game where there are monsters for the player to fight. When a monster is created, it may be resistant to certain types of attacks (chosen at random). The different type of attacks in the game are: poison, lightning, fire, cold, theft, acid, paralysis, and blindness.</p>
+
+<p>In order to track which types of attacks the monster is resistant to, we can use one boolean value per resistance (per monster). That’s 8 booleans per monster.</p>
+
+<p>With 100 monsters, that would take 800 boolean variables, using 800 bytes of memory.</p>
+
+<p>However, using bit flags:</p>
+
+<pre><code>const unsigned char resistsPoison    = 1 &lt;&lt; 0;
+const unsigned char resistsLightning = 1 &lt;&lt; 1;
+const unsigned char resistsFire      = 1 &lt;&lt; 2;
+const unsigned char resistsCold      = 1 &lt;&lt; 3;
+const unsigned char resistsTheft     = 1 &lt;&lt; 4;
+const unsigned char resistsAcid      = 1 &lt;&lt; 5;
+const unsigned char resistsParalysis = 1 &lt;&lt; 6;
+const unsigned char resistsBlindness = 1 &lt;&lt; 7;
+</code></pre>
+
+<p>Using bit flags, we only need one byte to store the resistances for a single monster, plus a one-time setup fee of 8 bytes for the options.</p>
+
+<pre><code>#include &lt;iostream&gt;
+int main()
+{
+        // Define a bunch of physical/emotional states
+    const unsigned char isHungry = 1 &lt;&lt; 0; // 0000 0001
+    const unsigned char isSad = 1 &lt;&lt; 1; // 0000 0010
+    const unsigned char isMad = 1 &lt;&lt; 2; // 0000 0100
+    const unsigned char isHappy = 1 &lt;&lt; 3; // 0000 1000
+    const unsigned char isLaughing = 1 &lt;&lt; 4; // 0001 0000
+    const unsigned char isAsleep = 1 &lt;&lt; 5; // 0010 0000
+    const unsigned char isDead = 1 &lt;&lt; 6; // 0100 0000
+    const unsigned char isCrying = 1 &lt;&lt; 7; // 1000 0000
+ 
+    unsigned char me = 0; // all flags/options turned off to start
+    me |= isHappy | isLaughing; // I am happy and laughing
+    me &amp;= ~isLaughing; // I am no longer laughing
+ 
+    // Query a few states (we'll use static_cast&lt;bool&gt; to interpret the results as a boolean value rather than an integer)
+    std::cout &lt;&lt; &quot;I am happy? &quot; &lt;&lt; static_cast&lt;bool&gt;(me &amp; isHappy) &lt;&lt; '\n';
+    std::cout &lt;&lt; &quot;I am laughing? &quot; &lt;&lt; static_cast&lt;bool&gt;(me &amp; isLaughing) &lt;&lt; '\n';
+    return 0;
+}
+</code></pre>
+
+<h2 id="introduce-to-bitset">Introduce to bitset</h2>
+
+<pre><code>#include &lt;bitset&gt;
+#include &lt;iostream&gt;
+ 
+// Note that with std::bitset, our options correspond to bit indices, not bit patterns
+const int option0 = 0;
+const int option1 = 1;
+const int option2 = 2;
+const int option3 = 3;
+const int option4 = 4;
+const int option5 = 5;
+const int option6 = 6;
+const int option7 = 7;
+ 
+int main()
+{
+    std::bitset&lt;8&gt; bits(0x2); // we need 8 bits, start with bit pattern 0000 0010
+    bits.set(option4); // set bit 4 to 1 (now we have 0001 0010)
+    bits.flip(option5); // flip bit 5 (now we have 0011 0010)
+    bits.reset(option5); // set bit 5 back to 0 (now we have 0001 0010)
+ 
+    std::cout &lt;&lt; &quot;Bit 4 has value: &quot; &lt;&lt; bits.test(option4) &lt;&lt; '\n';
+    std::cout &lt;&lt; &quot;Bit 5 has value: &quot; &lt;&lt; bits.test(option5) &lt;&lt; '\n';
+    std::cout &lt;&lt; &quot;All the bits: &quot; &lt;&lt; bits &lt;&lt; '\n';
+ 
+    return 0;
+}
+</code></pre>
+
+<h2 id="rgb">RGB</h2>
+
+<p>#include <iostream></p>
+
+<pre><code>int main()
+{
+    const unsigned int redBits = 0xFF000000;
+    const unsigned int greenBits = 0x00FF0000;
+    const unsigned int blueBits = 0x0000FF00;
+    const unsigned int alphaBits = 0x000000FF;
+ 
+    std::cout &lt;&lt; &quot;Enter a 32-bit RGBA color value in hexadecimal (e.g. FF7F3300): &quot;;
+    unsigned int pixel;
+    std::cin &gt;&gt; std::hex &gt;&gt; pixel; // std::hex allows us to read in a hex value
+ 
+    // use bitwise AND to isolate red pixels, then right shift the value into the range 0-255
+    unsigned char red = (pixel &amp; redBits) &gt;&gt; 24;
+    unsigned char green = (pixel &amp; greenBits) &gt;&gt; 16;
+    unsigned char blue = (pixel &amp; blueBits) &gt;&gt; 8;
+    unsigned char alpha = pixel &amp; alphaBits;
+ 
+    std::cout &lt;&lt; &quot;Your color contains:\n&quot;;
+    std::cout &lt;&lt; static_cast&lt;int&gt;(red) &lt;&lt; &quot; of 255 red\n&quot;;
+    std::cout &lt;&lt; static_cast&lt;int&gt;(green) &lt;&lt; &quot; of 255 green\n&quot;;
+    std::cout &lt;&lt; static_cast&lt;int&gt;(blue) &lt;&lt; &quot; of 255 blue\n&quot;;
+    std::cout &lt;&lt; static_cast&lt;int&gt;(alpha) &lt;&lt; &quot; of 255 alpha\n&quot;;
+ 
+    return 0;
+}
+</code></pre>
+
+<p>32-bit RGBA value</p>
+
+<table>
+<thead>
+<tr>
+<th>bits 31-24</th>
+<th>bits 23-16</th>
+<th>bits 15-8</th>
+<th>bits 7-0</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>RRRRRRRR</td>
+<td>GGGGGGGG</td>
+<td>BBBBBBBB</td>
+<td>AAAAAAAA</td>
+</tr>
+
+<tr>
+<td>red</td>
+<td>green</td>
+<td>blue</td>
+<td>alpha</td>
+</tr>
+</tbody>
+</table>
+
+<p>to turn on bit, we use bitwise OR  |=</p>
+
+<p><code>myflags |= option4;</code></p>
+
+<p>to clear bits (turn off), we use bitwise AND with an inverse bit pattern &amp;= ~</p>
+
+<p><code>myflags &amp;= ~option4;</code></p>
+
+<p>To toggle bit states, we use bitwise XOR ^=</p>
+
+<p><code>myflags ^= option4;</code></p>
+                    
+                </div>
+                <div class="feat share">
+                </div>
+                
+                
+                
+            </article>
+        </section>
+    </div>
+
+    <div class="next-prev-arrows">
+        
+        
+            <a rel="prev" href="https://krisloveless.github.io/2019/08/c---note4/" id="prev">
+                 <span class="nav-title nav-title-prev">C&#43;&#43; note(4)</span> &rarr;
+            </a>
+        
+    </div>
+
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+<script src="https://krisloveless.github.io/js/scrollreveal.min.js"></script>
+<script type='application/javascript' src='https://krisloveless.github.io/js/smooth-scrollbar.js'></script>
+<script src="https://krisloveless.github.io/js/baffle.min.js"></script>
+<script src="https://krisloveless.github.io/js/main.js"></script>
+
+
+
+
+
+<!-- Syntax highlighting -->
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.6/highlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+</body>
+</html>
