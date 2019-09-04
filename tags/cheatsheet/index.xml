@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Cheatsheet on lov31ess.py</title>
+    <title>cheatsheet on lov31ess.py</title>
     <link>https://krisloveless.github.io/tags/cheatsheet/</link>
-    <description>Recent content in Cheatsheet on lov31ess.py</description>
+    <description>Recent content in cheatsheet on lov31ess.py</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <copyright>© 2019 lov31ess. All Rights Reserved</copyright>
     <lastBuildDate>Sun, 21 Jul 2019 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="https://krisloveless.github.io/tags/cheatsheet/index.xml" rel="self" type="application/rss+xml" />

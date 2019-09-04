@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+
+
+
+ <html class="no-js"> 
+<head>
+    <title>C&#43;&#43; note(6)  &middot; lov31ess.py </title>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta http-equiv="content-language" content="en-us" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="author" content="Shuo &#34;Krisloveless&#34; Jia">
+    <meta name="description" content="">
+    <meta name="generator" content="Hugo 0.57.2" />
+
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="https://krisloveless.github.io/css/smooth-scrollbar.css" />
+    <link rel="stylesheet" type="text/css" href="https://krisloveless.github.io/css/main.css" />
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.6/styles/tomorrow.min.css" />
+    
+
+    <style>
+        .posts li {
+            visibility: hidden;
+        }
+    </style> 
+</head>
+<body>
+    
+    
+
+    <header>	
+	<div class="h-wrap">
+		
+		<h1 class="title"><a href="https://krisloveless.github.io/">lov31ess.py</a></h1>
+		
+	</div>
+</header>
+    
+    <div class="site-wrapper" id="full-wrapper">
+        
+        <section class="single-wrap">
+            <article class="single-content" itemscope itemtype="//schema.org/BlogPosting">
+                <div class="feat">
+                    <h5 class="page-date">
+                    <time datetime="" itemprop="datePublished">
+                    05 August 2019
+                   
+                    </time>
+                    </h5>
+                </div>
+                <h1 class="page-title" itemprop="name headline">C&#43;&#43; note(6)</h1>
+                <div itemprop="articleBody">
+                   <div style="text-align: center;font-style: italic;font-weight: bold;">C&#43;&#43; note originated from learncpp.com</div> 
+                    
+
+<h2 id="extern">extern</h2>
+
+<p>global.cpp</p>
+
+<pre><code>// define two global variables
+// non-const globals have external linkage by default
+int g_x; // external linkage by default
+extern int g_y(2); // external linkage by default, so this extern is redundant and ignored
+ 
+// in this file, g_x and g_y can be used anywhere beyond this point
+</code></pre>
+
+<p>main.cpp</p>
+
+<pre><code>extern int g_x; // forward declaration for g_x (defined in global.cpp) -- g_x can now be used beyond this point in this file
+ 
+int main()
+{
+    extern int g_y; // forward declaration for g_y (defined in global.cpp) -- g_y can be used beyond this point in main() only
+ 
+    g_x = 5;
+    std::cout &lt;&lt; g_y; // should print 2
+ 
+    return 0;
+}
+</code></pre>
+
+<h2 id="why-use-extern">why use extern?</h2>
+
+<p>constants.h</p>
+
+<pre><code>#ifndef CONSTANTS_H
+#define CONSTANTS_H
+ 
+// define your own namespace to hold constants
+namespace Constants
+{
+    const double pi(3.14159);
+    const double avogadro(6.0221413e23);
+    const double my_gravity(9.2); // m/s^2 -- gravity is light on this planet
+    // ... other related constants
+}
+#endif
+</code></pre>
+
+<p>Another way by using <code>extern</code> to forward all constant from constants.cpp.</p>
+
+<p>constants.h</p>
+
+<pre><code>#ifndef CONSTANTS_H
+#define CONSTANTS_H
+ 
+namespace Constants
+{
+    // since the actual variables are inside a namespace, the forward declarations need to be inside a namespace as well
+    extern const double pi;
+    extern const double avogadro;
+    extern const double my_gravity;
+}
+ 
+#endif
+</code></pre>
+
+<p>constants.cpp</p>
+
+<pre><code>namespace Constants
+{
+    // actual global variables
+    extern const double pi(3.14159);
+    extern const double avogadro(6.0221413e23);
+    extern const double my_gravity(9.2); // m/s^2 -- gravity is light on this planet
+}
+</code></pre>
+
+<h2 id="static">Static</h2>
+
+<pre><code>#include &lt;iostream&gt;
+ 
+void incrementAndPrint()
+{
+    static int s_value = 1; // static duration via static keyword.  This line is only executed once.
+    ++s_value;
+    std::cout &lt;&lt; s_value &lt;&lt; '\n';
+} // s_value is not destroyed here, but becomes inaccessible
+ 
+int main()
+{
+    incrementAndPrint();
+    incrementAndPrint();
+    incrementAndPrint();
+ 
+    return 0;
+}
+</code></pre>
+
+<p><strong>Static variables offer some of the benefit of global variables (they don’t get destroyed until the end of the program) while limiting their visibility to block scope. This makes them much safer for use than global variables.</strong></p>
+
+<h2 id="namespace">namespace</h2>
+
+<p>It’s legal to declare namespace blocks in multiple locations (either across multiple files, or multiple places within the same file). All declarations within the namespace block are considered part of the namespace.</p>
+
+<p>add.h</p>
+
+<pre><code>namespace BasicMath
+{
+    // function add() is part of namespace BasicMath
+    int add(int x, int y)
+    {
+        return x + y;
+    }
+}
+</code></pre>
+
+<p>subtruct.h</p>
+
+<pre><code>namespace BasicMath
+{
+    // function subtract() is also part of namespace BasicMath
+    int subtract(int x, int y)
+    {
+        return x - y;
+    }
+}
+</code></pre>
+
+<h2 id="using-different-namespaces">using different namespaces</h2>
+
+<p>Intentionally limit the scope of the using statement from the outset using the block scoping rules.</p>
+
+<pre><code>int main()
+{
+    {
+        using namespace Foo;
+        // calls to Foo:: stuff here
+    } // using namespace Foo expires
+ 
+    {
+        using namespace Goo;
+        // calls to Goo:: stuff here
+    } // using namespace Goo expires
+ 
+    return 0;
+}
+</code></pre>
+
+<h2 id="numeric-promotion-and-numeric-conversion">Numeric promotion and numeric conversion</h2>
+
+<p>Whenever a value from one type is converted into a value of <strong>a larger</strong> similar data type, this is called a <strong>numeric promotion</strong> (or widening, though this term is usually reserved for integers).</p>
+
+<pre><code>long l(64); // widen the integer 64 into a long
+double d(0.12f); // promote the float 0.12 into a double
+</code></pre>
+
+<p>When we convert a value from a larger type to a similar smaller type, or between different types, this is called a <strong>numeric conversion</strong>.</p>
+
+<pre><code>double d = 3; // convert integer 3 to a double (between different types)
+short s = 2; // convert integer 2 to a short (from larger to smaller type)
+</code></pre>
+
+<h2 id="casting">casting</h2>
+
+<p>c-style casting</p>
+
+<pre><code>int i1 = 10;
+int i2 = 4;
+float f = (float)i1 / i2;
+</code></pre>
+
+<p>Because C-style casts are not checked by the compiler at compile time, C-style casts can be inherently misused
+<strong>Avoid C-style casts</strong></p>
+
+<h2 id="explicit-conversion">explicit conversion</h2>
+
+<p>static_cast</p>
+
+<pre><code>int i = 48;
+char ch = static_cast&lt;char&gt;(i); // explicit conversion from int to char, so that a char is assigned to variable ch
+</code></pre>
+
+<h2 id="unexpected-behaviors-from-mixing-cin-with-getline">Unexpected behaviors from mixing cin with getline</h2>
+
+<pre><code>#include &lt;string&gt;
+#include &lt;iostream&gt;
+ 
+int main()
+{
+    std::cout &lt;&lt; &quot;Pick 1 or 2: &quot;;
+    int choice { 0 };
+    std::cin &gt;&gt; choice;
+ 
+    std::cout &lt;&lt; &quot;Now enter your name: &quot;;
+    std::string name;
+    std::getline(std::cin, name);
+ 
+    std::cout &lt;&lt; &quot;Hello, &quot; &lt;&lt; name &lt;&lt; &quot;, you picked &quot; &lt;&lt; choice &lt;&lt; '\n';
+ 
+    return 0;
+}
+</code></pre>
+
+<p>When you enter a value using cin, cin not only captures the value, it also captures the newline. So when we enter 2, cin actually gets the string “2\n”. It then extracts the 2 to variable choice, leaving the newline stuck in the input stream. Then, when std::getline() goes to read the name, it sees “\n” is already in the stream, and figures we must have entered an empty string!</p>
+
+<h2 id="enumerate">Enumerate</h2>
+
+<pre><code>enum Color {
+    COLOR_BLACK, // assigned 0
+    COLOR_RED, // assigned 1
+    COLOR_BLUE, // assigned 2
+    COLOR_GREEN, // assigned 3
+    COLOR_WHITE, // assigned 4
+    COLOR_CYAN, // assigned 5
+    COLOR_YELLOW, // assigned 6
+    COLOR_MAGENTA // assigned 7
+}
+Color paint(COLOR_WHITE);
+std::cout &lt;&lt; paint; // print 4
+</code></pre>
+
+<pre><code>Color color = static_cast&lt;Color&gt;(inputColor);
+</code></pre>
+
+<p>Can only be converted by static_cast to put an integer value into an enumerated type.</p>
+
+<p>Enumerated types are incredibly useful for code documentation and readability purposes when you need to represent a specific, predefined set of states.</p>
+
+<pre><code>enum ParseResult
+{
+    SUCCESS = 0,
+    ERROR_OPENING_FILE = -1,
+    ERROR_READING_FILE = -2,
+    ERROR_PARSING_FILE = -3
+};
+ 
+ParseResult readFileContents()
+{
+    if (!openFile())
+        return ERROR_OPENING_FILE;
+    if (!readFile())
+        return ERROR_READING_FILE;
+    if (!parsefile())
+        return ERROR_PARSING_FILE;
+ 
+    return SUCCESS;
+}
+
+if (readFileContents() == SUCCESS)
+    {
+    // do something
+    }
+else
+    {
+    // print error message
+    }
+</code></pre>
+
+<h2 id="enum-class">enum class</h2>
+
+<pre><code>#include &lt;iostream&gt;
+int main()
+{
+    enum class Color // &quot;enum class&quot; defines this as a scoped enumeration instead of a standard enumeration
+    {
+        RED, // RED is inside the scope of Color
+        BLUE
+    };
+ 
+    enum class Fruit
+    {
+        BANANA, // BANANA is inside the scope of Fruit
+        APPLE
+    };
+ 
+    Color color = Color::RED; // note: RED is not directly accessible any more, we have to use Color::RED
+    Fruit fruit = Fruit::BANANA; // note: BANANA is not directly accessible any more, we have to use Fruit::BANANA
+    
+    if (color == fruit) // compile error here, as the compiler doesn't know how to compare different types Color and Fruit
+        std::cout &lt;&lt; &quot;color and fruit are equal\n&quot;;
+    else
+        std::cout &lt;&lt; &quot;color and fruit are not equal\n&quot;;
+ 
+    return 0;
+}
+</code></pre>
+
+<p>In this case red cannot be compared to banana.</p>
+
+<h2 id="typedef">typedef</h2>
+
+<pre><code>#ifdef INT_2_BYTES
+typedef char int8_t;
+typedef int int16_t;
+typedef long int32_t;
+#else
+typedef char int8_t;
+typedef short int16_t;
+typedef int int32_t;
+#endif
+</code></pre>
+
+<p>platform specific example.</p>
+
+<h2 id="use-typedef-for-easy-code-maintenance">use typedef for easy code maintenance</h2>
+
+<p>For example, if you were using a short to hold a student’s ID number, but then later decided you needed a long instead, you’d have to comb through lots of code and replace short with long.
+However, with a typedef, all you have to do is change <code>typedef short studentID_t</code> to <code>typedef long studentID_t</code>.</p>
+
+<h2 id="simplify-then-code">simplify then code</h2>
+
+<p>typedef std::vector<std::pair<std::string, int> &gt; pairlist_t;</p>
+
+<p>in c++11 we can define as:</p>
+
+<pre><code>using distance_t = double;
+</code></pre>
+                    
+                </div>
+                <div class="feat share">
+                </div>
+                
+                
+                
+            </article>
+        </section>
+    </div>
+
+    <div class="next-prev-arrows">
+        
+            <a rel="next" href="https://krisloveless.github.io/2019/09/c-note7/" id="next">
+                &larr; <span class="nav-title nav-title-next">C&#43;&#43; note(7)</span> 
+            </a>
+        
+        
+            <a rel="prev" href="https://krisloveless.github.io/2019/08/c-note5/" id="prev">
+                 <span class="nav-title nav-title-prev">C&#43;&#43; note(5)</span> &rarr;
+            </a>
+        
+    </div>
+
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+<script src="https://krisloveless.github.io/js/scrollreveal.min.js"></script>
+<script type='application/javascript' src='https://krisloveless.github.io/js/smooth-scrollbar.js'></script>
+<script src="https://krisloveless.github.io/js/baffle.min.js"></script>
+<script src="https://krisloveless.github.io/js/main.js"></script>
+
+
+
+
+
+<!-- Syntax highlighting -->
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.6/highlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+</body>
+</html>

@@ -6,28 +6,49 @@
     <description>Recent content on lov31ess.py</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <copyright>© 2019 lov31ess. All Rights Reserved</copyright>
-    <lastBuildDate>Sun, 04 Aug 2019 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Tue, 03 Sep 2019 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="https://krisloveless.github.io/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
+      <title>C&#43;&#43; note(7)</title>
+      <link>https://krisloveless.github.io/2019/09/c-note7/</link>
+      <pubDate>Tue, 03 Sep 2019 00:00:00 +0000</pubDate>
+      
+      <guid>https://krisloveless.github.io/2019/09/c-note7/</guid>
+      <description>typeid() is in &amp;lt;typeinfo&amp;gt; Control flow Halt -&amp;gt; exit(0)
+Note that the if statement only executes a single statement if the expression is true, and the else only executes a single statement if the expression is false. In order to execute multiple statements, we can use a block {}
+something about switch switch (1) { int a; // okay, declaration is allowed before the case labels int b = 5; // illegal, initialization is not allowed before the case labels case 1: int y; // okay, declaration is allowed within a case y = 4; // okay, this is an assignment break; case 2: y = 5; // okay, y was declared above, so we can use it here too break; case 3: int z = 4; // illegal, initialization is not allowed within a case break; default: std::cout &amp;lt;&amp;lt; &amp;quot;default case&amp;quot; &amp;lt;&amp;lt; std::endl; break; }  goto should be shunned (avoid) #include &amp;lt;iostream&amp;gt; #include &amp;lt;cmath&amp;gt; // for sqrt() function int main() { double x; tryAgain: // this is a statement label std::cout &amp;lt;&amp;lt; &amp;quot;Enter a non-negative number&amp;quot;; std::cin &amp;gt;&amp;gt; x; if (x &amp;lt; 0.</description>
+    </item>
+    
+    <item>
+      <title>C&#43;&#43; note(6)</title>
+      <link>https://krisloveless.github.io/2019/08/c-note6/</link>
+      <pubDate>Mon, 05 Aug 2019 00:00:00 +0000</pubDate>
+      
+      <guid>https://krisloveless.github.io/2019/08/c-note6/</guid>
+      <description>extern global.cpp
+// define two global variables // non-const globals have external linkage by default int g_x; // external linkage by default extern int g_y(2); // external linkage by default, so this extern is redundant and ignored // in this file, g_x and g_y can be used anywhere beyond this point  main.cpp
+extern int g_x; // forward declaration for g_x (defined in global.cpp) -- g_x can now be used beyond this point in this file int main() { extern int g_y; // forward declaration for g_y (defined in global.</description>
+    </item>
+    
+    <item>
       <title>C&#43;&#43; note(5)</title>
-      <link>https://krisloveless.github.io/2019/08/c---note5/</link>
+      <link>https://krisloveless.github.io/2019/08/c-note5/</link>
       <pubDate>Sun, 04 Aug 2019 00:00:00 +0000</pubDate>
       
-      <guid>https://krisloveless.github.io/2019/08/c---note5/</guid>
+      <guid>https://krisloveless.github.io/2019/08/c-note5/</guid>
       <description>A very good function for pow int pow(int base, int exp) { int result = 1; while (exp) { if (exp &amp;amp; 1) result *= base; exp &amp;gt;&amp;gt;= 1; base *= base; } return result; }  Comma operator Comma , x, y Evaluate x then y, returns value of y
 int x = 0; int y = 2; int z = (++x, ++y); // increment x and y, z is 3  Converting decimal to binary Converting -76 to binary:</description>
     </item>
     
     <item>
       <title>C&#43;&#43; note(4)</title>
-      <link>https://krisloveless.github.io/2019/08/c---note4/</link>
+      <link>https://krisloveless.github.io/2019/08/c-note4/</link>
       <pubDate>Thu, 01 Aug 2019 00:00:00 +0000</pubDate>
       
-      <guid>https://krisloveless.github.io/2019/08/c---note4/</guid>
+      <guid>https://krisloveless.github.io/2019/08/c-note4/</guid>
       <description>The smallest unit of memory is a binary digit (also called a **bit)
 Memory is organized into sequential units called memory addresses (or addresses for short).
 Integer vs. Integral Integers are a specific data type that hold positive and negative whole numbers, including 0. The term “integral types” (which means “like an integer”) includes all of the boolean, characters, and integer types (and thus is a bit broader in definition).</description>
@@ -35,10 +56,10 @@ Integer vs. Integral Integers are a specific data type that hold positive and ne
     
     <item>
       <title>C&#43;&#43; note(3)</title>
-      <link>https://krisloveless.github.io/2019/07/c---note3/</link>
+      <link>https://krisloveless.github.io/2019/07/c-note3/</link>
       <pubDate>Wed, 31 Jul 2019 00:00:00 +0000</pubDate>
       
-      <guid>https://krisloveless.github.io/2019/07/c---note3/</guid>
+      <guid>https://krisloveless.github.io/2019/07/c-note3/</guid>
       <description>Errors A syntax error occurs when you write a statement that is not valid according to the grammar of the C++ language.
 A semantic error occurs when a statement is syntactically valid, but does not do what the programmer intended.
 Enable Debug #include &amp;lt;iostream&amp;gt; #define ENABLE_DEBUG // comment out to disable debugging int getUserInput() { #ifdef ENABLE_DEBUG std::cerr &amp;lt;&amp;lt; &amp;quot;getUserInput() called\n&amp;quot;; #endif std::cout &amp;lt;&amp;lt; &amp;quot;Enter a number: &amp;quot;; int x; std::cin &amp;gt;&amp;gt; x; return x; } int main() { #ifdef ENABLE_DEBUG std::cerr &amp;lt;&amp;lt; &amp;quot;main() called\n&amp;quot;; #endif int x = getUserInput(); std::cout &amp;lt;&amp;lt; &amp;quot;You entered: &amp;quot; &amp;lt;&amp;lt; x; return 0; }  Add watch &amp;amp; call stack add watch is a useful function to visualize value while debugging.</description>
@@ -46,10 +67,10 @@ Enable Debug #include &amp;lt;iostream&amp;gt; #define ENABLE_DEBUG // comment o
     
     <item>
       <title>C&#43;&#43; note(2)</title>
-      <link>https://krisloveless.github.io/2019/07/c---note2/</link>
+      <link>https://krisloveless.github.io/2019/07/c-note2/</link>
       <pubDate>Tue, 30 Jul 2019 00:00:00 +0000</pubDate>
       
-      <guid>https://krisloveless.github.io/2019/07/c---note2/</guid>
+      <guid>https://krisloveless.github.io/2019/07/c-note2/</guid>
       <description>User-defined function Functions that you write yourself are called user-defined functions.
 Local variables &amp;amp; lifetime Function parameters, as well as variables defined inside the function body, are called local variables.
 an object’s lifetime is defined to be the time between its creation and destruction.
@@ -58,10 +79,10 @@ Forward declaration int add(int, int); A forward declaration allows us to tell t
     
     <item>
       <title>C&#43;&#43; note(1)</title>
-      <link>https://krisloveless.github.io/2019/07/c---note1/</link>
+      <link>https://krisloveless.github.io/2019/07/c-note1/</link>
       <pubDate>Mon, 29 Jul 2019 00:00:00 +0000</pubDate>
       
-      <guid>https://krisloveless.github.io/2019/07/c---note1/</guid>
+      <guid>https://krisloveless.github.io/2019/07/c-note1/</guid>
       <description>The initalization int width = 5;: copy initialization
 int width(5); : direct initialization
 int width{}/*zero initialization*/;int width{5}/*explicit initialization*/;int width{4.5}; : uniform initialization,{} will get 0 init, 4.5 with issue an error.
