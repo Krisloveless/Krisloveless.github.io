@@ -199,6 +199,215 @@ int main()
     }
 }
 </code></pre>
+
+<h2 id="usage-of-array-with-enum">Usage of array with enum</h2>
+
+<pre><code>namespace StudentNames
+{
+    enum StudentNames
+    {
+        KENNY, // 0
+        KYLE, // 1
+        STAN, // 2
+        BUTTERS, // 3
+        CARTMAN, // 4
+        WENDY, // 5
+        MAX_STUDENTS // 6
+    };
+}
+ 
+int main()
+{
+    int testScores[StudentNames::MAX_STUDENTS]; // allocate 6 integers
+    testScores[StudentNames::STAN] = 76;
+ 
+    return 0;
+}
+</code></pre>
+
+<h2 id="get-size-of-array">get size of array</h2>
+
+<pre><code>#include &lt;iostream&gt; // for std::cout
+ 
+int main()
+{
+    int array[] = { 1, 1, 2, 3, 5, 8, 13, 21 };
+    std::cout &lt;&lt; &quot;The array has: &quot; &lt;&lt; sizeof(array) / sizeof(array[0]) &lt;&lt; &quot; elements\n&quot;;
+ 
+    return 0;
+}
+</code></pre>
+
+<h2 id="std-sort">std::sort</h2>
+
+<pre><code>#include &lt;algorithm&gt; // for std::sort
+#include &lt;iostream&gt;
+ 
+int main()
+{
+    const int length = 5;
+    int array[length] = { 30, 50, 20, 10, 40 };
+ 
+    std::sort(std::begin(array), std::end(array));
+ 
+    for (int i=0; i &lt; length; ++i) // better to use std::size or std::ssize here if your compiler supports them
+        std::cout &lt;&lt; array[i] &lt;&lt; ' ';
+ 
+    return 0;
+}
+</code></pre>
+
+<h2 id="c-type-string">c-type-string</h2>
+
+<p>Although “string” only has 6 letters, C++ automatically adds a null terminator to the end of the string for us (we don’t need to include it ourselves). Consequently, myString is actually an array of length 7!</p>
+
+<h2 id="use-of-pointer">use of pointer</h2>
+
+<p>1) Arrays are implemented using pointers. Pointers can be used to iterate through an array (as an alternative to array indices) .
+2) They are the only way you can dynamically allocate memory in C++. This is by far the most common use case for pointers.
+3) They can be used to pass a large amount of data to a function in a way that doesn’t involve copying the data, which is inefficient
+4) They can be used to pass a function as a parameter to another function.
+5) They can be used to achieve polymorphism when dealing with inheritance.
+6) They can be used to have one struct/class point at another struct/class, to form a chain. This is useful in some more advanced data structures, such as linked lists and trees.</p>
+
+<h2 id="null-macro">null macro</h2>
+
+<pre><code>#include &lt;cstddef&gt; // for NULL
+ 
+double *ptr { NULL }; // ptr is a null pointer
+</code></pre>
+
+<p>C++11 introduces a new keyword called nullptr. nullptr is both a keyword and an rvalue constant, much like the boolean keywords true and false are.</p>
+
+<p>Starting with C++11, this should be favored instead of 0 when we want a null pointer:</p>
+
+<pre><code>int *ptr { nullptr }; // note: ptr is still an integer pointer, just set to a null value
+</code></pre>
+
+<p>C++11 also introduces a new type called std::nullptr_t (in header <cstddef>). std::nullptr_t can only hold one value: nullptr! While this may seem kind of silly, it’s useful in one situation. If we want to write a function that accepts only a nullptr argument, what type do we make the parameter? The answer is std::nullptr_t.</p>
+
+<pre><code>#include &lt;iostream&gt;
+#include &lt;cstddef&gt; // for std::nullptr_t
+ 
+void doSomething(std::nullptr_t ptr)
+{
+    std::cout &lt;&lt; &quot;in doSomething()\n&quot;;
+}
+ 
+int main()
+{
+    doSomething(nullptr); // call doSomething with an argument of type std::nullptr_t
+ 
+    return 0;
+}
+</code></pre>
+
+<h3 id="6-8-pointers-and-arrays">6.8 pointers and arrays</h3>
+
+<p>deleting a single pointer</p>
+
+<pre><code>// assume ptr has previously been allocated with operator new
+delete ptr; // return the memory pointed to by ptr to the operating system
+ptr = 0; // set ptr to be a null pointer (use nullptr instead of 0 in C++11)
+</code></pre>
+
+<pre><code>void doSomething()
+{
+    int *ptr = new int;
+}
+</code></pre>
+
+<p>Because ptr is the only variable holding the address of the dynamically allocated integer, when ptr is destroyed there are no more references to the dynamically allocated memory.</p>
+
+<p>This is called a memory leak. Memory leaks happen when your program loses the address of some bit of dynamically allocated memory before giving it back to the operating system.</p>
+
+<h2 id="dynamically-allocate-arrays">dynamically allocate arrays</h2>
+
+<p>#include <iostream></p>
+
+<pre><code>int main()
+{
+    std::cout &lt;&lt; &quot;Enter a positive integer: &quot;;
+    int length;
+    std::cin &gt;&gt; length;
+ 
+    int *array = new int[length]; // use array new.  Note that length does not need to be constant!
+ 
+    std::cout &lt;&lt; &quot;I just allocated an array of integers of length &quot; &lt;&lt; length &lt;&lt; '\n';
+ 
+    array[0] = 5; // set element 0 to value 5
+ 
+    delete[] array; // use array delete to deallocate array
+ 
+    // we don't need to set array to nullptr/0 here because it's going to go out of scope immediately after this anyway
+ 
+    return 0;
+}
+int *array = new int[5] { 9, 7, 5, 3, 1 }; // initialize a dynamic array in C++11
+</code></pre>
+
+<h2 id="l-value-r-value">l-value r-value</h2>
+
+<p>An l-value is a value that has an address (in memory).</p>
+
+<pre><code>int value = 5;
+int &amp;ref = value; // valid reference, initialized to variable value
+int &amp;invalidRef; // invalid, needs to reference something
+</code></pre>
+
+<p>References can not be reassigned, must be initialized. Since all variables have addresses, all variables are l-values. The name l-value came about because l-values are the only values that can be on the left side of an assignment statement. When we do an assignment, the left hand side of the assignment operator must be an l-value. Consequently, a statement like 5 = 6; will cause a compile error, because 5 is not an l-value.</p>
+
+<h2 id="when-passing-a-array-to-a-function-the-array-decays-into-a-pointer">when passing a array[] to a function, the array decays into a pointer</h2>
+
+<h2 id="void-pointer">void pointer</h2>
+
+<pre><code>int value = 5;
+void *voidPtr = &amp;value;
+ 
+//cout &lt;&lt; *voidPtr &lt;&lt; endl; // illegal: cannot dereference a void pointer
+ 
+int *intPtr = static_cast&lt;int*&gt;(voidPtr); // however, if we cast our void pointer to an int pointer...
+ 
+cout &lt;&lt; *intPtr &lt;&lt; endl; // then we can dereference it like normal
+</code></pre>
+
+<p>void pointer should be casted before used in cout.</p>
+
+<h2 id="arrays-of-pointers">arrays of pointers</h2>
+
+<pre><code>int **array = new int*[10]; // allocate an array of 10 int pointers, pointer is int*
+</code></pre>
+
+<pre><code>int (*array)[5] = new int[10][5];// pointer is int
+
+// equals to
+
+auto array = new int[10][5]; // so much simpler!
+</code></pre>
+
+<h2 id="std-array">std::array</h2>
+
+<pre><code>#include &lt;array&gt;
+std::array&lt;int, 5&gt; myArray = { 9, 7, 5, 3, 1 }; // initialization list
+</code></pre>
+
+<pre><code>#include &lt;iostream&gt;
+#include &lt;array&gt;
+ 
+int main()
+{
+    std::array&lt;int, 5&gt; myArray { 7, 3, 1, 9, 5 };
+ 
+    using index_t = std::array&lt;int, 5&gt;::size_type;
+    for (index_t i{ 0 }; i &lt; myArray.size(); ++i) // here or std::size_t
+        std::cout &lt;&lt; myArray[i] &lt;&lt; ' ';
+ 
+    return 0;
+}
+</code></pre>
+
+<p>The answer is that there’s a likely signed/unsigned mismatch in this code! Due to a curious decision, the size() function and array index parameter to operator[] use a type called size_type, which is defined by the C++ standard as an unsigned integral type. Our loop counter/index (variable i) is a signed int. Therefore both the comparison i &lt; myArray.size() and the array index myArray[i] have type mismatches.
+In all implementations of std::array, size_type is a typedef for std::size_t. So it&rsquo;s somewhat common to see developers use size_t instead for brevity</p>
                     
                 </div>
                 <div class="feat share">
@@ -211,6 +420,10 @@ int main()
     </div>
 
     <div class="next-prev-arrows">
+        
+            <a rel="next" href="https://krisloveless.github.io/2019/09/c-note8/" id="next">
+                &larr; <span class="nav-title nav-title-next">C&#43;&#43; note(8)</span> 
+            </a>
         
         
             <a rel="prev" href="https://krisloveless.github.io/2019/08/c-note6/" id="prev">

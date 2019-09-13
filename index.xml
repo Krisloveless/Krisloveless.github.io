@@ -6,10 +6,19 @@
     <description>Recent content on lov31ess.py</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Tue, 03 Sep 2019 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Wed, 11 Sep 2019 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="https://krisloveless.github.io/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>C&#43;&#43; note(8)</title>
+      <link>https://krisloveless.github.io/2019/09/c-note8/</link>
+      <pubDate>Wed, 11 Sep 2019 00:00:00 +0000</pubDate>
+      
+      <guid>https://krisloveless.github.io/2019/09/c-note8/</guid>
+      <description>Mixing return references and values int returnByValue() { return 5; } int&amp;amp; returnByReference() { static int x = 5; // static ensures x isn&#39;t destroyed when the function ends return x; } int main() { int value = returnByReference(); // case A -- ok, treated as return by value int &amp;amp;ref = returnByValue(); // case B -- compile error since the value is an r-value, and an r-value can&#39;t bind to a non-const reference const int &amp;amp;cref = returnByValue(); // case C -- ok, the lifetime of the return value is extended to the lifetime of cref }  Returning multiple values  #include &amp;lt;tuple&amp;gt; #include &amp;lt;iostream&amp;gt; std::tuple&amp;lt;int, double&amp;gt; returnTuple() // return a tuple that contains an int and a double { return std::make_tuple(5, 6.</description>
+    </item>
     
     <item>
       <title>C&#43;&#43; note(7)</title>
