@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+
+
+
+ <html class="no-js"> 
+<head>
+    <title>C&#43;&#43; note(9)  &middot; lov31ess.py </title>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta http-equiv="content-language" content="en-us" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="author" content="Shuo &#34;Krisloveless&#34; Jia">
+    <meta name="description" content="">
+    <meta name="generator" content="Hugo 0.57.2" />
+
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="https://krisloveless.github.io/css/smooth-scrollbar.css" />
+    <link rel="stylesheet" type="text/css" href="https://krisloveless.github.io/css/main.css" />
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.6/styles/tomorrow.min.css" />
+    
+
+    <style>
+        .posts li {
+            visibility: hidden;
+        }
+    </style> 
+</head>
+<body>
+    
+    
+
+    <header>	
+	<div class="h-wrap">
+		
+		<h1 class="title"><a href="https://krisloveless.github.io/">lov31ess.py</a></h1>
+		
+	</div>
+</header>
+    
+    <div class="site-wrapper" id="full-wrapper">
+        
+        <section class="single-wrap">
+            <article class="single-content" itemscope itemtype="//schema.org/BlogPosting">
+                <div class="feat">
+                    <h5 class="page-date">
+                    <time datetime="" itemprop="datePublished">
+                    17 September 2019
+                   
+                    </time>
+                    </h5>
+                </div>
+                <h1 class="page-title" itemprop="name headline">C&#43;&#43; note(9)</h1>
+                <div itemprop="articleBody">
+                   <div style="text-align: center;font-style: italic;font-weight: bold;">C&#43;&#43; note originated from learncpp.com</div> 
+                    
+
+<pre><code>#include &lt;iostream&gt;
+ 
+struct DateStruct
+{
+    int year;
+    int month;
+    int day;
+};
+ 
+void print(DateStruct &amp;date)
+{
+    std::cout &lt;&lt; date.year &lt;&lt; &quot;/&quot; &lt;&lt; date.month &lt;&lt; &quot;/&quot; &lt;&lt; date.day;
+}
+ 
+int main()
+{
+    DateStruct today { 2020, 10, 14 }; // use uniform initialization
+ 
+    today.day = 16; // use member selection operator to select a member of the struct
+    print(today);
+ 
+    return 0;
+}
+</code></pre>
+
+<pre><code>#include &lt;iostream&gt;
+ 
+class DateClass
+{
+public:
+    int m_year;
+    int m_month;
+    int m_day;
+ 
+    void print()
+    {
+        std::cout &lt;&lt; m_year &lt;&lt; &quot;/&quot; &lt;&lt; m_month &lt;&lt; &quot;/&quot; &lt;&lt; m_day;
+    }
+};
+ 
+int main()
+{
+    DateClass today { 2020, 10, 14 };
+ 
+    today.m_day = 16; // use member selection operator to select a member variable of the class
+    today.print(); // use member selection operator to call a member function of the class
+ 
+    return 0;
+}
+</code></pre>
+
+<h2 id="public-and-private-by-default">public and private by default</h2>
+
+<pre><code>#include &lt;iostream&gt;
+ 
+class DateClass // members are private by default
+{
+    int m_month; // private by default, can only be accessed by other members
+    int m_day; // private by default, can only be accessed by other members
+    int m_year; // private by default, can only be accessed by other members
+ 
+public:
+    void setDate(int month, int day, int year)
+    {
+        m_month = month;
+        m_day = day;
+        m_year = year;
+    }
+ 
+    void print()
+    {
+        std::cout &lt;&lt; m_month &lt;&lt; &quot;/&quot; &lt;&lt; m_day &lt;&lt; &quot;/&quot; &lt;&lt; m_year;
+    }
+ 
+    // Note the addition of this function
+    void copyFrom(const DateClass &amp;d)
+    {
+        // Note that we can access the private members of d directly
+        m_month = d.m_month;
+        m_day = d.m_day;
+        m_year = d.m_year;
+    }
+};
+ 
+int main()
+{
+    DateClass date;
+    date.setDate(10, 14, 2020); // okay, because setDate() is public
+    
+    DateClass copy;
+    copy.copyFrom(date); // okay, because copyFrom() is public
+    copy.print();
+ 
+    return 0;
+}
+</code></pre>
+
+<h2 id="constructor">constructor</h2>
+
+<pre><code>#include &lt;cassert&gt;
+ 
+class Fraction
+{
+private:
+    int m_numerator;
+    int m_denominator;
+ 
+public:
+    Fraction() // default constructor
+    {
+         m_numerator = 0;
+         m_denominator = 1;
+    }
+ 
+    // Constructor with two parameters, one parameter having a default value
+    Fraction(int numerator, int denominator=1)
+    {
+        assert(denominator != 0);
+        m_numerator = numerator;
+        m_denominator = denominator;
+    }
+ 
+    int getNumerator() { return m_numerator; }
+    int getDenominator() { return m_denominator; }
+    double getValue() { return static_cast&lt;double&gt;(m_numerator) / m_denominator; }
+};
+
+    
+int x = 6; // Copy initialize an integer
+Fraction six = Fraction(6); // Copy initialize a Fraction, will call Fraction(6, 1)
+Fraction seven = 7; // Copy initialize a Fraction.  The compiler will try to find a way to convert 7 to a Fraction, which will invoke the Fraction(7, 1) constructor.
+</code></pre>
+
+<h2 id="best-way-for-constructor-reduce-the-parameters">best way for constructor: reduce the parameters</h2>
+
+<pre><code>#include &lt;cassert&gt;
+ 
+class Fraction
+{
+private:
+    int m_numerator;
+    int m_denominator;
+ 
+public:
+    // Default constructor
+    Fraction(int numerator=0, int denominator=1)
+    {
+        assert(denominator != 0);
+        m_numerator = numerator;
+        m_denominator = denominator;
+    }
+ 
+    int getNumerator() { return m_numerator; }
+    int getDenominator() { return m_denominator; }
+    double getValue() { return static_cast&lt;double&gt;(m_numerator) / m_denominator; }
+};
+
+   
+Fraction zero; // will call Fraction(0, 1)
+Fraction six(6); // will call Fraction(6, 1)
+Fraction fiveThirds(5,3); // will call Fraction(5, 3)
+</code></pre>
+
+<h2 id="work-for-initialize-const-variable-but-not-assign-them">Work for initialize const variable but not assign them</h2>
+
+<pre><code>class Something
+{
+private:
+    const int m_value;
+ 
+public:
+    Something(): m_value(5) // directly initialize our const member variable This works because we’re allowed to initialize const variables (but not assign to them!).
+    {
+    } 
+};
+</code></pre>
+
+<p>Prior to C++11, you can only zero an array member via a member initialization list:</p>
+
+<pre><code>class Something
+{
+private:
+    const int m_array[5];
+ 
+public:
+    Something(): m_array {} // zero the member array
+    {
+    }
+ 
+};
+// c++11
+   
+class Something
+{
+private:
+    const int m_array[5];
+ 
+public:
+    Something(): m_array { 1, 2, 3, 4, 5 } // use uniform initialization to initialize our member array
+    {
+    }
+ 
+};
+</code></pre>
+
+<h2 id="good-format-for-initialization">good format for initialization</h2>
+
+<pre><code>class Something
+{
+private:
+    int m_value1;
+    double m_value2;
+    char m_value3;
+    float m_value4;
+ 
+public:
+    Something(int value1, double value2, char value3='c', float value4=34.6) // this line already has a lot of stuff on it
+        : m_value1(value1), // one per line, commas at end of each line
+        m_value2(value2),
+        m_value3(value3),
+        m_value4(value4) 
+    {
+    }
+ 
+};
+</code></pre>
+
+<h2 id="using-a-separate-function-to-declare-a-constructor">using a separate function to declare a constructor</h2>
+
+<pre><code>class Foo
+{
+private:
+    void DoA()
+    {
+        // code to do A
+    }
+ 
+public:
+    Foo()
+    {
+        DoA();
+    }
+ 
+    Foo(int nValue)
+    {
+        DoA();
+        // code to do B
+    }
+ 
+};
+</code></pre>
+
+<h2 id="in-c-11-use-a-delegate-construction-for-reducing-redundant-code">in c++11 use a delegate construction for reducing redundant code</h2>
+
+<pre><code>#include &lt;string&gt;
+#include &lt;iostream&gt;
+ 
+class Employee
+{
+private:
+    int m_id;
+    std::string m_name;
+ 
+public:
+    Employee(int id=0, const std::string &amp;name=&quot;&quot;):
+        m_id(id), m_name(name)
+    {
+        std::cout &lt;&lt; &quot;Employee &quot; &lt;&lt; m_name &lt;&lt; &quot; created.\n&quot;;
+    }
+ 
+    // Use a delegating constructors to minimize redundant code
+    Employee(const std::string &amp;name) : Employee(0, name) { }
+};
+</code></pre>
+
+<p>##destructor</p>
+
+<p>Generally you should not call a destructor explicitly (as it will be called automatically when the object is destroyed).</p>
+
+<pre><code>#include &lt;iostream&gt;
+#include &lt;cassert&gt;
+ 
+class IntArray
+{
+private:
+    int *m_array;
+    int m_length;
+ 
+public:
+    IntArray(int length) // constructor
+    {
+        assert(length &gt; 0);
+ 
+        m_array = new int[length];
+        m_length = length;
+    }
+ 
+    ~IntArray() // destructor
+    {
+        // Dynamically delete the array we allocated earlier
+        delete[] m_array ;
+    }
+ 
+    void setValue(int index, int value) { m_array[index] = value; }
+    int getValue(int index) { return m_array[index]; }
+ 
+    int getLength() { return m_length; }
+};
+ 
+int main()
+{
+    IntArray ar(10); // allocate 10 integers
+    for (int count=0; count &lt; ar.getLength(); ++count)
+        ar.setValue(count, count+1);
+ 
+    std::cout &lt;&lt; &quot;The value of element 5 is: &quot; &lt;&lt; ar.getValue(5);
+ 
+    return 0;
+} // ar is destroyed here, so the ~IntArray() destructor function is called here
+
+</code></pre>
+
+<p>The IntArray class at the top of this lesson is an example of a class that implements RAII &ndash; allocation in the constructor, deallocation in the destructor. std::string and std::vector are examples of classes in the standard library that follow RAII &ndash; dynamic memory is acquired on initialization, and cleaned up automatically on destruction.</p>
+
+<p><strong><em>Rule: If your class dynamically allocates memory, use the RAII paradigm, and don’t allocate objects of your class dynamically</em></strong></p>
+
+<h2 id="usage-of-this">usage of *this</h2>
+
+<pre><code>class Calc
+{
+private:
+    int m_value;
+ 
+public:
+    Calc() { m_value = 0; }
+ 
+    Calc&amp; add(int value) { m_value += value; return *this; }
+    Calc&amp; sub(int value) { m_value -= value; return *this; }
+    Calc&amp; mult(int value) { m_value *= value; return *this; }
+ 
+    int getValue() { return m_value; }
+};
+</code></pre>
+
+<p>now here we can chain the different 4 arithmetics</p>
+
+<pre><code>#include &lt;iostream&gt;
+int main()
+{
+    Calc calc;
+    calc.add(5).sub(3).mult(4);
+ 
+    std::cout &lt;&lt; calc.getValue() &lt;&lt; '\n';
+    return 0;
+}
+</code></pre>
+
+<h2 id="const-member-function">const member function</h2>
+
+<p>const class variable can only call const function</p>
+
+<pre><code>#include &lt;string&gt;
+ 
+class Something
+{
+private:
+    std::string m_value;
+ 
+public:
+    Something(const std::string &amp;value=&quot;&quot;) { m_value= value; }
+ 
+    const std::string&amp; getValue() const { return m_value; } // getValue() for const objects
+    std::string&amp; getValue() { return m_value; } // getValue() for non-const objects
+};
+</code></pre>
+
+<pre><code>int main()
+{
+    Something something;
+    something.getValue() = &quot;Hi&quot;; // calls non-const getValue();
+ 
+    const Something something2;
+    something2.getValue(); // calls const getValue();
+ 
+    return 0;
+}
+</code></pre>
+                    
+                </div>
+                <div class="feat share">
+                </div>
+                
+                
+                
+            </article>
+        </section>
+    </div>
+
+    <div class="next-prev-arrows">
+        
+            <a rel="next" href="https://krisloveless.github.io/2019/10/c-note10/" id="next">
+                &larr; <span class="nav-title nav-title-next">C&#43;&#43; note(10)</span> 
+            </a>
+        
+        
+            <a rel="prev" href="https://krisloveless.github.io/2019/09/c-note8/" id="prev">
+                 <span class="nav-title nav-title-prev">C&#43;&#43; note(8)</span> &rarr;
+            </a>
+        
+    </div>
+
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+<script src="https://krisloveless.github.io/js/scrollreveal.min.js"></script>
+<script type='application/javascript' src='https://krisloveless.github.io/js/smooth-scrollbar.js'></script>
+<script src="https://krisloveless.github.io/js/baffle.min.js"></script>
+<script src="https://krisloveless.github.io/js/main.js"></script>
+
+
+
+
+
+<!-- Syntax highlighting -->
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.6/highlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+</body>
+</html>

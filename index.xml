@@ -6,10 +6,29 @@
     <description>Recent content on lov31ess.py</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Wed, 11 Sep 2019 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Tue, 01 Oct 2019 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="https://krisloveless.github.io/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>C&#43;&#43; note(10)</title>
+      <link>https://krisloveless.github.io/2019/10/c-note10/</link>
+      <pubDate>Tue, 01 Oct 2019 00:00:00 +0000</pubDate>
+      
+      <guid>https://krisloveless.github.io/2019/10/c-note10/</guid>
+      <description>static variable Static members are not associated with class objects!!
+class Something { public: static int s_value; }; int Something::s_value = 1; int main() { Something first; Something second; first.s_value = 2; std::cout &amp;lt;&amp;lt; first.s_value &amp;lt;&amp;lt; &#39;\n&#39;; // produce 2 std::cout &amp;lt;&amp;lt; second.s_value &amp;lt;&amp;lt; &#39;\n&#39;; // produce 2 return 0; }  class Something { private: static int s_idGenerator; int m_id; public: Something() { m_id = s_idGenerator++; } // grab the next value from the id generator int getID() const { return m_id; } }; // Note that we&#39;re defining and initializing s_idGenerator even though it is declared as private above.</description>
+    </item>
+    
+    <item>
+      <title>C&#43;&#43; note(9)</title>
+      <link>https://krisloveless.github.io/2019/09/c-note9/</link>
+      <pubDate>Tue, 17 Sep 2019 00:00:00 +0000</pubDate>
+      
+      <guid>https://krisloveless.github.io/2019/09/c-note9/</guid>
+      <description>#include &amp;lt;iostream&amp;gt; struct DateStruct { int year; int month; int day; }; void print(DateStruct &amp;amp;date) { std::cout &amp;lt;&amp;lt; date.year &amp;lt;&amp;lt; &amp;quot;/&amp;quot; &amp;lt;&amp;lt; date.month &amp;lt;&amp;lt; &amp;quot;/&amp;quot; &amp;lt;&amp;lt; date.day; } int main() { DateStruct today { 2020, 10, 14 }; // use uniform initialization today.day = 16; // use member selection operator to select a member of the struct print(today); return 0; }  #include &amp;lt;iostream&amp;gt; class DateClass { public: int m_year; int m_month; int m_day; void print() { std::cout &amp;lt;&amp;lt; m_year &amp;lt;&amp;lt; &amp;quot;/&amp;quot; &amp;lt;&amp;lt; m_month &amp;lt;&amp;lt; &amp;quot;/&amp;quot; &amp;lt;&amp;lt; m_day; } }; int main() { DateClass today { 2020, 10, 14 }; today.</description>
+    </item>
     
     <item>
       <title>C&#43;&#43; note(8)</title>

@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+
+
+
+ <html class="no-js"> 
+<head>
+    <title>C&#43;&#43; note(10)  &middot; lov31ess.py </title>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta http-equiv="content-language" content="en-us" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="author" content="Shuo &#34;Krisloveless&#34; Jia">
+    <meta name="description" content="">
+    <meta name="generator" content="Hugo 0.57.2" />
+
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="https://krisloveless.github.io/css/smooth-scrollbar.css" />
+    <link rel="stylesheet" type="text/css" href="https://krisloveless.github.io/css/main.css" />
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.6/styles/tomorrow.min.css" />
+    
+
+    <style>
+        .posts li {
+            visibility: hidden;
+        }
+    </style> 
+</head>
+<body>
+    
+    
+
+    <header>	
+	<div class="h-wrap">
+		
+		<h1 class="title"><a href="https://krisloveless.github.io/">lov31ess.py</a></h1>
+		
+	</div>
+</header>
+    
+    <div class="site-wrapper" id="full-wrapper">
+        
+        <section class="single-wrap">
+            <article class="single-content" itemscope itemtype="//schema.org/BlogPosting">
+                <div class="feat">
+                    <h5 class="page-date">
+                    <time datetime="" itemprop="datePublished">
+                    01 October 2019
+                   
+                    </time>
+                    </h5>
+                </div>
+                <h1 class="page-title" itemprop="name headline">C&#43;&#43; note(10)</h1>
+                <div itemprop="articleBody">
+                   <div style="text-align: center;font-style: italic;font-weight: bold;">C&#43;&#43; note originated from learncpp.com</div> 
+                    
+
+<h2 id="static-variable">static variable</h2>
+
+<p>Static members are not associated with class objects!!</p>
+
+<pre><code>class Something
+{
+public:
+    static int s_value;
+};
+ 
+int Something::s_value = 1;
+ 
+int main()
+{
+    Something first;
+    Something second;
+ 
+    first.s_value = 2;
+ 
+    std::cout &lt;&lt; first.s_value &lt;&lt; '\n'; // produce 2
+    std::cout &lt;&lt; second.s_value &lt;&lt; '\n'; // produce 2
+    return 0;
+}
+</code></pre>
+
+<pre><code>class Something
+{
+private:
+    static int s_idGenerator;
+    int m_id;
+ 
+public:
+    Something() { m_id = s_idGenerator++; } // grab the next value from the id generator
+ 
+    int getID() const { return m_id; }
+};
+ 
+// Note that we're defining and initializing s_idGenerator even though it is declared as private above.
+// This is okay since the definition isn't subject to access controls.
+int Something::s_idGenerator = 1; // start our ID generator with value 1
+ 
+int main()
+{
+    Something first;
+    Something second;
+    Something third;
+ 
+    std::cout &lt;&lt; first.getID() &lt;&lt; '\n'; // print 1
+    std::cout &lt;&lt; second.getID() &lt;&lt; '\n'; // print 2
+    std::cout &lt;&lt; third.getID() &lt;&lt; '\n'; // print 3
+    return 0;
+}
+</code></pre>
+
+<p>static value does not have constructor</p>
+
+<h2 id="friend-function">friend function</h2>
+
+<pre><code>class Accumulator
+{
+private:
+    int m_value;
+public:
+    Accumulator() { m_value = 0; } 
+    void add(int value) { m_value += value; }
+ 
+    // Make the reset() function a friend of this class
+    friend void reset(Accumulator &amp;accumulator);
+};
+ 
+// reset() is now a friend of the Accumulator class
+void reset(Accumulator &amp;accumulator)
+{
+    // And can access the private data of Accumulator objects
+    accumulator.m_value = 0;
+}
+ 
+int main()
+{
+    Accumulator acc;
+    acc.add(5); // add 5 to the accumulator
+    reset(acc); // reset the accumulator to 0
+ 
+    return 0;
+}
+</code></pre>
+
+<pre><code>#include &lt;iostream&gt;
+ 
+class Storage
+{
+private:
+    int m_nValue;
+    double m_dValue;
+public:
+    Storage(int nValue, double dValue)
+    {
+        m_nValue = nValue;
+        m_dValue = dValue;
+    }
+ 
+    // Make the Display class a friend of Storage
+    friend class Display;
+};
+ 
+class Display
+{
+private:
+    bool m_displayIntFirst;
+ 
+public:
+    Display(bool displayIntFirst) { m_displayIntFirst = displayIntFirst; }
+ 
+    void displayItem(const Storage &amp;storage)
+    {
+        if (m_displayIntFirst)
+            std::cout &lt;&lt; storage.m_nValue &lt;&lt; &quot; &quot; &lt;&lt; storage.m_dValue &lt;&lt; '\n';
+        else // display double first
+            std::cout &lt;&lt; storage.m_dValue &lt;&lt; &quot; &quot; &lt;&lt; storage.m_nValue &lt;&lt; '\n';
+    }
+};
+ 
+int main()
+{
+    Storage storage(5, 6.7);
+    Display display(false);
+ 
+    display.displayItem(storage);
+ 
+    return 0;
+}
+</code></pre>
+
+<p>Because the Display class is a friend of Storage, any of Display’s members that use a Storage class object can access the private members of Storage directly.</p>
+
+<h2 id="anonymous-object">anonymous object</h2>
+
+<pre><code>#include &lt;iostream&gt;
+ 
+int add(int x, int y)
+{
+    int sum = x + y;
+    return sum;
+}
+ 
+int main()
+{
+    std::cout &lt;&lt; add(5, 3);
+ 
+    return 0;
+}
+</code></pre>
+
+<pre><code>#include &lt;iostream&gt;
+ 
+class Cents
+{
+private:
+    int m_cents;
+ 
+public:
+    Cents(int cents) { m_cents = cents; }
+ 
+    int getCents() const { return m_cents; }
+};
+ 
+void print(const Cents &amp;cents)
+{
+   std::cout &lt;&lt; cents.getCents() &lt;&lt; &quot; cents&quot;;
+}
+ 
+int main()
+{
+    print(Cents(6)); // Note: Now we're passing an anonymous Cents value
+ 
+    return 0;
+}
+</code></pre>
+
+<h2 id="nested-class">nested class</h2>
+
+<pre><code>#include &lt;iostream&gt;
+ 
+class Fruit
+{
+public:
+    // Note: we've moved FruitType inside the class, under the public access specifier
+    enum FruitType
+    {
+        APPLE,
+        BANANA,
+        CHERRY
+    };
+ 
+private:
+    FruitType m_type;
+    int m_percentageEaten = 0;
+ 
+public:
+ 
+ 
+    Fruit(FruitType type) :
+        m_type(type)
+    {
+    }
+ 
+    FruitType getType() { return m_type;  }
+    int getPercentageEaten() { return m_percentageEaten;  }
+};
+ 
+int main()
+{
+    // Note: we access the FruitType via Fruit now
+    Fruit apple(Fruit::APPLE);
+    
+    if (apple.getType() == Fruit::APPLE)
+        std::cout &lt;&lt; &quot;I am an apple&quot;;
+    else
+        std::cout &lt;&lt; &quot;I am not an apple&quot;;
+    
+    return 0;
+}
+</code></pre>
+
+<pre><code>// high_resolution_clock example
+#include &lt;iostream&gt;
+#include &lt;ctime&gt;
+#include &lt;ratio&gt;
+#include &lt;chrono&gt;
+
+int main ()
+{
+  using namespace std::chrono;
+
+  high_resolution_clock::time_point t1 = high_resolution_clock::now();
+
+  std::cout &lt;&lt; &quot;printing out 1000 stars...\n&quot;;
+  for (int i=0; i&lt;1000; ++i) std::cout &lt;&lt; &quot;*&quot;;
+  std::cout &lt;&lt; std::endl;
+
+  high_resolution_clock::time_point t2 = high_resolution_clock::now();
+
+  duration&lt;double&gt; time_span = duration_cast&lt;duration&lt;double&gt;&gt;(t2 - t1);
+
+  std::cout &lt;&lt; &quot;It took me &quot; &lt;&lt; time_span.count() &lt;&lt; &quot; seconds.&quot;;
+  std::cout &lt;&lt; std::endl;
+
+  return 0;
+}
+</code></pre>
+                    
+                </div>
+                <div class="feat share">
+                </div>
+                
+                
+                
+            </article>
+        </section>
+    </div>
+
+    <div class="next-prev-arrows">
+        
+        
+            <a rel="prev" href="https://krisloveless.github.io/2019/09/c-note9/" id="prev">
+                 <span class="nav-title nav-title-prev">C&#43;&#43; note(9)</span> &rarr;
+            </a>
+        
+    </div>
+
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+<script src="https://krisloveless.github.io/js/scrollreveal.min.js"></script>
+<script type='application/javascript' src='https://krisloveless.github.io/js/smooth-scrollbar.js'></script>
+<script src="https://krisloveless.github.io/js/baffle.min.js"></script>
+<script src="https://krisloveless.github.io/js/main.js"></script>
+
+
+
+
+
+<!-- Syntax highlighting -->
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.6/highlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+</body>
+</html>
