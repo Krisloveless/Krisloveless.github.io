@@ -1,0 +1,881 @@
+<!DOCTYPE html>
+
+
+
+ <html class="no-js"> 
+<head>
+    <title>C&#43;&#43; note(11)  &middot; lov31ess.py </title>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta http-equiv="content-language" content="en-us" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="author" content="Shuo &#34;Krisloveless&#34; Jia">
+    <meta name="description" content="">
+    <meta name="generator" content="Hugo 0.57.2" />
+
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="https://krisloveless.github.io/css/smooth-scrollbar.css" />
+    <link rel="stylesheet" type="text/css" href="https://krisloveless.github.io/css/main.css" />
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.6/styles/tomorrow.min.css" />
+    
+
+    <style>
+        .posts li {
+            visibility: hidden;
+        }
+    </style> 
+</head>
+<body>
+    
+    
+
+    <header>	
+	<div class="h-wrap">
+		
+		<h1 class="title"><a href="https://krisloveless.github.io/">lov31ess.py</a></h1>
+		
+	</div>
+</header>
+    
+    <div class="site-wrapper" id="full-wrapper">
+        
+        <section class="single-wrap">
+            <article class="single-content" itemscope itemtype="//schema.org/BlogPosting">
+                <div class="feat">
+                    <h5 class="page-date">
+                    <time datetime="" itemprop="datePublished">
+                    09 October 2019
+                   
+                    </time>
+                    </h5>
+                </div>
+                <h1 class="page-title" itemprop="name headline">C&#43;&#43; note(11)</h1>
+                <div itemprop="articleBody">
+                   <div style="text-align: center;font-style: italic;font-weight: bold;">C&#43;&#43; note originated from learncpp.com</div> 
+                    
+
+<h2 id="a-friend-function-for-operator-overload">A friend function for operator overload</h2>
+
+<pre><code>#include &lt;iostream&gt;
+ 
+class Cents
+{
+private:
+    int m_cents;
+ 
+public:
+    Cents(int cents) { m_cents = cents; }
+ 
+    // add Cents + Cents using a friend function
+    friend Cents operator+(const Cents &amp;c1, const Cents &amp;c2);
+ 
+    int getCents() const { return m_cents; }
+};
+ 
+// note: this function is not a member function!
+Cents operator+(const Cents &amp;c1, const Cents &amp;c2)
+{
+    // use the Cents constructor and operator+(int, int)
+    // we can access m_cents directly because this is a friend function
+    return Cents(c1.m_cents + c2.m_cents);
+}
+ 
+int main()
+{
+    Cents cents1(6);
+    Cents cents2(8);
+    Cents centsSum = cents1 + cents2;
+    std::cout &lt;&lt; &quot;I have &quot; &lt;&lt; centsSum.getCents() &lt;&lt; &quot; cents.&quot; &lt;&lt; std::endl;
+ 
+    return 0;
+</code></pre>
+
+<h2 id="not-using-friend">Not using friend</h2>
+
+<pre><code>#include &lt;iostream&gt;
+ 
+class Cents
+{
+private:
+    int m_cents;
+ 
+public:
+    Cents(int cents) { m_cents = cents; }
+ 
+    int getCents() const { return m_cents; }
+};
+ 
+// note: this function is not a member function nor a friend function!
+Cents operator+(const Cents &amp;c1, const Cents &amp;c2)
+{
+    // use the Cents constructor and operator+(int, int)
+        // we don't need direct access to private members here
+    return Cents(c1.getCents() + c2.getCents());
+}
+ 
+int main()
+{
+    Cents cents1(6);
+    Cents cents2(8);
+    Cents centsSum = cents1 + cents2;
+    std::cout &lt;&lt; &quot;I have &quot; &lt;&lt; centsSum.getCents() &lt;&lt; &quot; cents.&quot; &lt;&lt; std::endl;
+ 
+    return 0;
+}
+</code></pre>
+
+<h2 id="overloading-i-o">Overloading I/O</h2>
+
+<pre><code>#include &lt;iostream&gt;
+ 
+class Point
+{
+private:
+    double m_x, m_y, m_z;
+ 
+public:
+    Point(double x=0.0, double y=0.0, double z=0.0): m_x(x), m_y(y), m_z(z)
+    {
+    }
+ 
+    friend std::ostream&amp; operator&lt;&lt; (std::ostream &amp;out, const Point &amp;point);
+};
+ 
+std::ostream&amp; operator&lt;&lt; (std::ostream &amp;out, const Point &amp;point)
+{
+    // Since operator&lt;&lt; is a friend of the Point class, we can access Point's members directly.
+    out &lt;&lt; &quot;Point(&quot; &lt;&lt; point.m_x &lt;&lt; &quot;, &quot; &lt;&lt; point.m_y &lt;&lt; &quot;, &quot; &lt;&lt; point.m_z &lt;&lt; &quot;)&quot;; // actual output done here
+ 
+    return out; // return std::ostream so we can chain calls to operator&lt;&lt;
+}
+ 
+int main()
+{
+    Point point1(2.0, 3.0, 4.0);
+ 
+    std::cout &lt;&lt; point1;
+ 
+    return 0;
+}
+</code></pre>
+
+<h2 id="unary-operator">Unary operator</h2>
+
+<pre><code>#include &lt;iostream&gt;
+ 
+class Cents
+{
+private:
+    int m_cents;
+ 
+public:
+    Cents(int cents) { m_cents = cents; }
+ 
+    // Overload -Cents as a member function
+    Cents operator-() const;
+ 
+    int getCents() const { return m_cents; }
+};
+ 
+// note: this function is a member function!
+Cents Cents::operator-() const
+{
+    return Cents(-m_cents);
+}
+ 
+int main()
+{
+    const Cents nickle(5);
+    std::cout &lt;&lt; &quot;A nickle of debt is worth &quot; &lt;&lt; (-nickle).getCents() &lt;&lt; &quot; cents\n&quot;;
+ 
+    return 0;
+}
+</code></pre>
+
+<pre><code>   
+#include &lt;iostream&gt;
+ 
+class Point
+{
+private:
+    double m_x, m_y, m_z;
+ 
+public:
+    Point(double x=0.0, double y=0.0, double z=0.0):
+        m_x(x), m_y(y), m_z(z)
+    {
+    }
+ 
+    // Convert a Point into its negative equivalent
+    Point operator- () const;
+ 
+    // Return true if the point is set at the origin
+    bool operator! () const;
+ 
+    double getX() const { return m_x; }
+    double getY() const { return m_y; }
+    double getZ() const { return m_z; }
+};
+ 
+// Convert a Point into its negative equivalent 
+Point Point::operator- () const
+{
+    return Point(-m_x, -m_y, -m_z);
+}
+ 
+// Return true if the point is set at the origin, false otherwise
+bool Point::operator! () const
+{
+    return (m_x == 0.0 &amp;&amp; m_y == 0.0 &amp;&amp; m_z == 0.0);
+}
+ 
+int main()
+{
+    Point point; // use default constructor to set to (0.0, 0.0, 0.0)
+ 
+    if (!point)
+        std::cout &lt;&lt; &quot;point is set at the origin.\n&quot;;
+    else
+        std::cout &lt;&lt; &quot;point is not set at the origin.\n&quot;;
+ 
+    return 0;
+}
+</code></pre>
+
+<h2 id="wrap-around-overload-prefix-postfix">wrap around overload ++, &ndash; (prefix, postfix)</h2>
+
+<p>C++ uses a “dummy variable” or “dummy argument” for the postfix operators. This argument is a fake integer parameter that only serves to distinguish the postfix version of increment/decrement from the prefix version.</p>
+
+<pre><code>class Digit
+{
+private:
+    int m_digit;
+public:
+    Digit(int digit=0)
+        : m_digit(digit)
+    {
+    }
+ 
+    Digit&amp; operator++(); // prefix
+    Digit&amp; operator--(); // prefix
+ 
+    Digit operator++(int); // postfix
+    Digit operator--(int); // postfix
+ 
+    friend std::ostream&amp; operator&lt;&lt; (std::ostream &amp;out, const Digit &amp;d);
+};
+ 
+Digit&amp; Digit::operator++()
+{
+    // If our number is already at 9, wrap around to 0
+    if (m_digit == 9)
+        m_digit = 0;
+    // otherwise just increment to next number
+    else
+        ++m_digit;
+ 
+    return *this;
+}
+ 
+Digit&amp; Digit::operator--()
+{
+    // If our number is already at 0, wrap around to 9
+    if (m_digit == 0)
+        m_digit = 9;
+    // otherwise just decrement to next number
+    else
+        --m_digit;
+ 
+    return *this;
+}
+ 
+Digit Digit::operator++(int)
+{
+    // Create a temporary variable with our current digit
+    Digit temp(m_digit);
+ 
+    // Use prefix operator to increment this digit
+    ++(*this); // apply operator
+ 
+    // return temporary result
+    return temp; // return saved state
+}
+ 
+Digit Digit::operator--(int)
+{
+    // Create a temporary variable with our current digit
+    Digit temp(m_digit);
+ 
+    // Use prefix operator to decrement this digit
+    --(*this); // apply operator
+ 
+    // return temporary result
+    return temp; // return saved state
+}
+ 
+std::ostream&amp; operator&lt;&lt; (std::ostream &amp;out, const Digit &amp;d)
+{
+    out &lt;&lt; d.m_digit;
+    return out;
+}
+ 
+int main()
+{
+    Digit digit(5);
+ 
+    std::cout &lt;&lt; digit;
+    std::cout &lt;&lt; ++digit; // calls Digit::operator++();
+    std::cout &lt;&lt; digit++; // calls Digit::operator++(int);
+    std::cout &lt;&lt; digit;
+    std::cout &lt;&lt; --digit; // calls Digit::operator--();
+    std::cout &lt;&lt; digit--; // calls Digit::operator--(int);
+    std::cout &lt;&lt; digit;
+ 
+    return 0;
+}
+</code></pre>
+
+<h2 id="overloading-operator-like-python3-getitem-i">overloading operator[] like python3 (<strong>getitem</strong>(i))</h2>
+
+<pre><code>class IntList
+{
+private:
+    int m_list[10];
+ 
+public:
+    int&amp; operator[] (int index);
+};
+ 
+int&amp; IntList::operator[] (int index)
+{
+    return m_list[index];
+}
+</code></pre>
+
+<p>With error checking</p>
+
+<pre><code>#include &lt;cassert&gt; // for assert()
+ 
+class IntList
+{
+private:
+    int m_list[10];
+ 
+public:
+    int&amp; operator[] (int index);
+};
+ 
+int&amp; IntList::operator[] (int index)
+{
+    assert(index &gt;= 0 &amp;&amp; index &lt; 10);
+ 
+    return m_list[index];
+}
+</code></pre>
+
+<p>reset ()</p>
+
+<pre><code>#include &lt;cassert&gt; // for assert()
+class Matrix
+{
+private:
+    double data[4][4];
+public:
+    Matrix()
+    {
+        // Set all elements of the matrix to 0.0
+        for (int row=0; row &lt; 4; ++row)
+            for (int col=0; col &lt; 4; ++col)
+                data[row][col] = 0.0;
+    }
+ 
+    double&amp; operator()(int row, int col);
+    const double&amp; operator()(int row, int col) const; // for const objects
+};
+ 
+double&amp; Matrix::operator()(int row, int col)
+{
+    assert(col &gt;= 0 &amp;&amp; col &lt; 4);
+    assert(row &gt;= 0 &amp;&amp; row &lt; 4);
+ 
+    return data[row][col];
+}
+ 
+const double&amp; Matrix::operator()(int row, int col) const
+{
+    assert(col &gt;= 0 &amp;&amp; col &lt; 4);
+    assert(row &gt;= 0 &amp;&amp; row &lt; 4);
+ 
+    return data[row][col];
+}
+
+</code></pre>
+
+<h2 id="overload-for-type">overload for type</h2>
+
+<pre><code>class Cents
+{
+private:
+    int m_cents;
+public:
+    Cents(int cents=0)
+    {
+        m_cents = cents;
+    }
+ 
+    // Overloaded int cast
+    operator int() const { return m_cents; }
+ 
+    int getCents() const { return m_cents; }
+    void setCents(int cents) { m_cents = cents; }
+};
+</code></pre>
+
+<h2 id="copy-constructor">copy constructor</h2>
+
+<pre><code>#include &lt;cassert&gt;
+#include &lt;iostream&gt;
+ 
+class Fraction
+{
+private:
+    int m_numerator;
+    int m_denominator;
+ 
+public:
+    // Default constructor
+    Fraction(int numerator=0, int denominator=1) :
+        m_numerator(numerator), m_denominator(denominator)
+    {
+        assert(denominator != 0);
+    }
+ 
+    // Copy constructor
+    Fraction(const Fraction &amp;fraction) :
+        m_numerator(fraction.m_numerator), m_denominator(fraction.m_denominator)
+        // Note: We can access the members of parameter fraction directly, because we're inside the Fraction class
+    {
+        // no need to check for a denominator of 0 here since fraction must already be a valid Fraction
+        std::cout &lt;&lt; &quot;Copy constructor called\n&quot;; // just to prove it works
+    }
+ 
+    friend std::ostream&amp; operator&lt;&lt;(std::ostream&amp; out, const Fraction &amp;f1);
+};
+ 
+std::ostream&amp; operator&lt;&lt;(std::ostream&amp; out, const Fraction &amp;f1)
+{
+    out &lt;&lt; f1.m_numerator &lt;&lt; &quot;/&quot; &lt;&lt; f1.m_denominator;
+    return out;
+}
+ 
+int main()
+{
+    Fraction fiveThirds(5, 3); // Direct initialize a Fraction, calls Fraction(int, int) constructor
+    Fraction fCopy(fiveThirds); // Direct initialize -- with Fraction copy constructor
+    std::cout &lt;&lt; fCopy &lt;&lt; '\n';
+}
+</code></pre>
+
+<h2 id="copy-initalization">copy initalization</h2>
+
+<pre><code>int x = 5
+
+// and class  
+int main()
+{
+    Fraction six = Fraction(6);  // equal to Fraction six(Fraction(6));
+    std::cout &lt;&lt; six;
+    return 0;
+}
+</code></pre>
+
+<p>avoid using copy initalization for class</p>
+
+<pre><code>#include &lt;cassert&gt;
+#include &lt;iostream&gt;
+ 
+class Fraction
+{
+private:
+    int m_numerator;
+    int m_denominator;
+ 
+public:
+    // Default constructor
+    Fraction(int numerator=0, int denominator=1) :
+        m_numerator(numerator), m_denominator(denominator)
+    {
+        assert(denominator != 0);
+    }
+ 
+        // Copy constructor
+    Fraction(const Fraction &amp;copy) :
+        m_numerator(copy.m_numerator), m_denominator(copy.m_denominator)
+    {
+        // no need to check for a denominator of 0 here since copy must already be a valid Fraction
+        std::cout &lt;&lt; &quot;Copy constructor called\n&quot;; // just to prove it works
+    }
+ 
+    friend std::ostream&amp; operator&lt;&lt;(std::ostream&amp; out, const Fraction &amp;f1);
+        int getNumerator() { return m_numerator; }
+        void setNumerator(int numerator) { m_numerator = numerator; }
+};
+ 
+std::ostream&amp; operator&lt;&lt;(std::ostream&amp; out, const Fraction &amp;f1)
+{
+    out &lt;&lt; f1.m_numerator &lt;&lt; &quot;/&quot; &lt;&lt; f1.m_denominator;
+    return out;
+}
+ 
+Fraction makeNegative(Fraction f) // ideally we should do this by const reference
+{
+    f.setNumerator(-f.getNumerator());
+    return f;
+}
+ 
+int main()
+{
+    Fraction fiveThirds(5, 3);
+    std::cout &lt;&lt; makeNegative(fiveThirds);
+ 
+    return 0;
+}
+</code></pre>
+
+<p>result:
+Copy constructor called
+Copy constructor called
+-<sup>5</sup>&frasl;<sub>3</sub></p>
+
+<h2 id="implicitly-convertion">implicitly convertion</h2>
+
+<pre><code>#include &lt;cassert&gt;
+#include &lt;iostream&gt;
+ 
+class Fraction
+{
+private:
+    int m_numerator;
+    int m_denominator;
+ 
+public:
+    // Default constructor
+    Fraction(int numerator = 0, int denominator = 1) :
+        m_numerator(numerator), m_denominator(denominator)
+    {
+        assert(denominator != 0);
+    }
+ 
+    // Copy constructor
+    Fraction(const Fraction &amp;copy) :
+        m_numerator(copy.m_numerator), m_denominator(copy.m_denominator)
+    {
+        // no need to check for a denominator of 0 here since copy must already be a valid Fraction
+        std::cout &lt;&lt; &quot;Copy constructor called\n&quot;; // just to prove it works
+    }
+ 
+    friend std::ostream&amp; operator&lt;&lt;(std::ostream&amp; out, const Fraction &amp;f1);
+    int getNumerator() { return m_numerator; }
+    void setNumerator(int numerator) { m_numerator = numerator; }
+};
+ 
+void printFraction(const Fraction &amp;f)
+{
+    std::cout &lt;&lt; f;
+}
+ 
+std::ostream&amp; operator&lt;&lt;(std::ostream&amp; out, const Fraction &amp;f1)
+{
+    out &lt;&lt; f1.m_numerator &lt;&lt; &quot;/&quot; &lt;&lt; f1.m_denominator;
+    return out;
+}
+ 
+int main()
+{
+    printFraction(6);
+ 
+    return 0;
+}
+</code></pre>
+
+<p>**use explicit keyword to avoid implicit **</p>
+
+<pre><code>
+#include &lt;string&gt;
+#include &lt;iostream&gt;
+ 
+class MyString
+{
+private:
+    std::string m_string;
+public:
+        // explicit keyword makes this constructor ineligible for implicit conversions
+    explicit MyString(int x) // allocate string of size x
+    {
+        m_string.resize(x);
+    }
+ 
+    MyString(const char *string) // allocate string to hold string value
+    {
+        m_string = string;
+    }
+ 
+    friend std::ostream&amp; operator&lt;&lt;(std::ostream&amp; out, const MyString &amp;s);
+ 
+};
+ 
+std::ostream&amp; operator&lt;&lt;(std::ostream&amp; out, const MyString &amp;s)
+{
+    out &lt;&lt; s.m_string;
+    return out;
+}
+ 
+void printString(const MyString &amp;s)
+{
+    std::cout &lt;&lt; s;
+}
+ 
+int main()
+{
+    MyString mine = 'x'; // compile error, since MyString(int) is now explicit and nothing will match this
+    std::cout &lt;&lt; mine;
+ 
+    printString('x'); // compile error, since MyString(int) can't be used for implicit conversions
+ 
+    return 0;
+}
+</code></pre>
+
+<h2 id="delete-keyword-for-deleting-a-function">delete keyword for deleting a function</h2>
+
+<pre><code>#include &lt;string&gt;
+#include &lt;iostream&gt;
+ 
+class MyString
+{
+private:
+    std::string m_string;
+ 
+public:
+        MyString(char) = delete; // any use of this constructor is an error
+ 
+        // explicit keyword makes this constructor ineligible for implicit conversions
+    explicit MyString(int x) // allocate string of size x /
+    {
+        m_string.resize(x);
+    }
+ 
+    MyString(const char *string) // allocate string to hold string value
+    {
+        m_string = string;
+    }
+ 
+    friend std::ostream&amp; operator&lt;&lt;(std::ostream&amp; out, const MyString &amp;s);
+ 
+};
+ 
+std::ostream&amp; operator&lt;&lt;(std::ostream&amp; out, const MyString &amp;s)
+{
+    out &lt;&lt; s.m_string;
+    return out;
+}
+ 
+int main()
+{
+    MyString mine('x'); // compile error, since MyString(char) is deleted
+    std::cout &lt;&lt; mine;
+    return 0;
+}
+</code></pre>
+
+<h2 id="overload-assignment-for-chaining">overload assignment for chaining</h2>
+
+<pre><code>#include &lt;cassert&gt;
+#include &lt;iostream&gt;
+ 
+class Fraction
+{
+private:
+    int m_numerator;
+    int m_denominator;
+ 
+public:
+    // Default constructor
+    Fraction(int numerator=0, int denominator=1) :
+        m_numerator(numerator), m_denominator(denominator)
+    {
+        assert(denominator != 0);
+    }
+ 
+    // Copy constructor
+    Fraction(const Fraction &amp;copy) :
+        m_numerator(copy.m_numerator), m_denominator(copy.m_denominator)
+    {
+        // no need to check for a denominator of 0 here since copy must already be a valid Fraction
+        std::cout &lt;&lt; &quot;Copy constructor called\n&quot;; // just to prove it works
+    }
+ 
+        // Overloaded assignment
+        Fraction&amp; operator= (const Fraction &amp;fraction);
+ 
+    friend std::ostream&amp; operator&lt;&lt;(std::ostream&amp; out, const Fraction &amp;f1);
+        
+};
+ 
+std::ostream&amp; operator&lt;&lt;(std::ostream&amp; out, const Fraction &amp;f1)
+{
+    out &lt;&lt; f1.m_numerator &lt;&lt; &quot;/&quot; &lt;&lt; f1.m_denominator;
+    return out;
+}
+ 
+// A simplistic implementation of operator= (see better implementation below)
+Fraction&amp; Fraction::operator= (const Fraction &amp;fraction)
+{
+    // do the copy
+    m_numerator = fraction.m_numerator;
+    m_denominator = fraction.m_denominator;
+ 
+    // return the existing object so we can chain this operator
+    return *this;
+}
+ 
+int main()
+{
+    Fraction fiveThirds(5, 3);
+    Fraction f;
+    f = fiveThirds; // calls overloaded assignment
+    std::cout &lt;&lt; f;
+ 
+    return 0;
+}
+
+</code></pre>
+
+<pre><code>int main()
+{
+    Fraction f1(5,3);
+    Fraction f2(7,2);
+    Fraction f3(9,5);
+ 
+    f1 = f2 = f3; // chained assignment
+ 
+    return 0;
+}
+</code></pre>
+
+<h2 id="detect-self-assignment">detect self-assignment</h2>
+
+<pre><code>  
+// A simplistic implementation of operator= (do not use)
+MyString&amp; MyString::operator= (const MyString&amp; str)
+{
+    // self-assignment check
+    if (this == &amp;str)
+        return *this;
+ 
+    // if data exists in the current string, delete it
+    if (m_data) delete[] m_data;
+ 
+    m_length = str.m_length;
+ 
+    // copy the data from str to the implicit object
+    m_data = new char[str.m_length];
+ 
+    for (int i = 0; i &lt; str.m_length; ++i)
+        m_data[i] = str.m_data[i];
+ 
+    // return the existing object so we can chain this operator
+    return *this;
+}
+</code></pre>
+
+<h2 id="c-will-generator-a-default-copy-constructor-with-shallow-copy">c++ will generator a default copy constructor with shallow copy</h2>
+
+<p>so we need to define our own</p>
+
+<pre><code>// assumes m_data is initialized
+void MyString::deepCopy(const MyString&amp; source)
+{
+    // first we need to deallocate any value that this string is holding!
+    delete[] m_data;
+ 
+    // because m_length is not a pointer, we can shallow copy it
+    m_length = source.m_length;
+ 
+    // m_data is a pointer, so we need to deep copy it if it is non-null
+    if (source.m_data)
+    {
+        // allocate memory for our copy
+        m_data = new char[m_length];
+ 
+        // do the copy
+        for (int i=0; i &lt; m_length; ++i)
+            m_data[i] = source.m_data[i];
+    }
+    else
+        m_data = nullptr;
+}
+ 
+// Copy constructor
+MyString::MyString(const MyString&amp; source):
+    m_data(nullptr)
+{
+    deepCopy(source);
+}
+
+</code></pre>
+
+<p>overloading =</p>
+
+<pre><code>// Assignment operator
+MyString&amp; MyString::operator=(const MyString &amp; source)
+{
+    // check for self-assignment
+    if (this == &amp;source)
+        return *this;
+ 
+    // now do the deep copy
+    deepCopy(source);
+ 
+    return *this;
+}
+</code></pre>
+                    
+                </div>
+                <div class="feat share">
+                </div>
+                
+                
+                
+            </article>
+        </section>
+    </div>
+
+    <div class="next-prev-arrows">
+        
+            <a rel="next" href="https://krisloveless.github.io/2019/10/c-note12/" id="next">
+                &larr; <span class="nav-title nav-title-next">C&#43;&#43; note(12)</span> 
+            </a>
+        
+        
+            <a rel="prev" href="https://krisloveless.github.io/2019/10/c-note10/" id="prev">
+                 <span class="nav-title nav-title-prev">C&#43;&#43; note(10)</span> &rarr;
+            </a>
+        
+    </div>
+
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+<script src="https://krisloveless.github.io/js/scrollreveal.min.js"></script>
+<script type='application/javascript' src='https://krisloveless.github.io/js/smooth-scrollbar.js'></script>
+<script src="https://krisloveless.github.io/js/baffle.min.js"></script>
+<script src="https://krisloveless.github.io/js/main.js"></script>
+
+
+
+
+
+<!-- Syntax highlighting -->
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.6/highlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+</body>
+</html>
